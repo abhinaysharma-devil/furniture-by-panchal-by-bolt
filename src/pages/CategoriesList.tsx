@@ -8,18 +8,20 @@ const CategoriesList: React.FC = () => {
   const [data, setData] = useState(categories);
 
   useEffect(() => {
-    // Ensure VITE_API_BASE_URL is set in your .env file for local development
-    // and in Vercel environment variables for production.
     const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
 
     if (baseApiUrl) {
       axios.get(`${baseApiUrl}/api/categories`)
         .then(response => {
           setData(response.data);
+          console.log('Fetched categories from API:$$$', response.data);
         })
         .catch(error => {
           console.error('Error fetching categories from API:', error);
           // Falls back to mock data if API call fails, as `data` is initialized with `categories`.
+        })
+        .finally(() => {
+          console.log('Categories fetch attempt completed.');
         });
     } else {
       console.warn('VITE_API_BASE_URL is not set. Using mock data for categories.');

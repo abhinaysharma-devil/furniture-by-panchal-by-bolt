@@ -319,7 +319,7 @@ export const contactUsContent = {
   heading: 'Get in Touch',
   description: 'Have questions or need assistance? We\'re here to help! Reach out to us through any of the methods below or visit one of our showrooms.',
   email: 'contact@furniturebypanchal.com',
-  phone: '+91 98765 43210',
+  phone: '+91 8358985420',
   address: '123 Furniture Street, Mumbai, Maharashtra, India - 400001',
   hours: 'Mon-Sat: 10:00 AM - 8:00 PM | Sun: 11:00 AM - 6:00 PM',
   showrooms: [

@@ -1,23 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Carousel from '../components/ui/Carousel';
 import ProductCard from '../components/ui/ProductCard';
 import CategoryCard from '../components/ui/CategoryCard';
 import { heroSlides, categories, featuredProducts } from '../data/mockData';
+import axios from 'axios';
 
 const Home: React.FC = () => {
+  const [data, setData] = useState(categories);
+
+  useEffect(() => {
+    const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
+
+    if (baseApiUrl) {
+      axios.get(`${baseApiUrl}/api/categories`)
+        .then(response => {
+          setData(response.data);
+          console.log('Fetched categories from API:$$$', response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching categories from API:', error);
+          // Falls back to mock data if API call fails, as `data` is initialized with `categories`.
+        })
+        .finally(() => {
+          console.log('Categories fetch attempt completed.');
+        });
+    } else {
+      console.warn('VITE_API_BASE_URL is not set. Using mock data for categories.');
+      // Continues to use mock data as `data` is initialized with `categories`.
+    }
+  }, []);
   return (
     <div>
       {/* Hero Section */}
       <section className="h-[600px]">
-        <Carousel 
-          slides={heroSlides} 
-          className="h-full" 
-          interval={5000} 
+        <Carousel
+          slides={heroSlides}
+          className="h-full"
+          interval={5000}
         />
       </section>
-      
+
       {/* Categories Section */}
       <section className="py-16 bg-background-light">
         <div className="container-custom">
@@ -31,15 +55,15 @@ const Home: React.FC = () => {
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.slice(0, 3).map((category) => (
+            {(data || categories).slice(0, 3).map((category) => (
               <CategoryCard key={category.id} category={category} />
             ))}
           </div>
         </div>
       </section>
-      
+
       {/* Featured Products Section */}
       <section className="py-16 bg-background-dark">
         <div className="container-custom">
@@ -53,7 +77,7 @@ const Home: React.FC = () => {
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredProducts.slice(0, 4).map((product) => (
               <ProductCard key={product.id} product={product} />
@@ -61,7 +85,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Banner Section */}
       <section className="py-16 bg-primary-900 text-white">
         <div className="container-custom">
@@ -69,7 +93,7 @@ const Home: React.FC = () => {
             <div>
               <h2 className="text-3xl font-bold mb-4">Craftsmanship That Lasts</h2>
               <p className="mb-6 text-white/80 leading-relaxed">
-                At Furniture By Panchal, we pride ourselves on creating pieces that stand the test of time. 
+                At Furniture By Panchal, we pride ourselves on creating pieces that stand the test of time.
                 Our furniture is crafted with attention to detail, using only the finest materials, and designed to be both beautiful and functional.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -82,29 +106,29 @@ const Home: React.FC = () => {
               </div>
             </div>
             <div className="relative h-80 rounded-lg overflow-hidden">
-              <img 
-                src="https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750" 
-                alt="Furniture craftsman at work" 
+              <img
+                src="https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750"
+                alt="Furniture craftsman at work"
                 className="w-full h-full object-cover"
               />
             </div>
           </div>
         </div>
       </section>
-      
+
       {/* Testimonials Section */}
       <section className="py-16 bg-background-light">
         <div className="container-custom">
           <h2 className="text-3xl font-bold mb-2 text-center">What Our Customers Say</h2>
           <p className="text-gray-600 text-center mb-12">Read testimonials from our satisfied customers</p>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                 <div className="flex items-center mb-4">
-                  <img 
-                    src={testimonial.avatar} 
-                    alt={testimonial.name} 
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
                     className="w-12 h-12 rounded-full object-cover mr-4"
                   />
                   <div>
@@ -122,7 +146,7 @@ const Home: React.FC = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Newsletter Section */}
       <section className="py-16 bg-gray-100">
         <div className="container-custom max-w-3xl text-center">
@@ -131,10 +155,10 @@ const Home: React.FC = () => {
             Subscribe to our newsletter for the latest product updates, exclusive offers, and interior design tips.
           </p>
           <form className="flex flex-col sm:flex-row gap-3">
-            <input 
-              type="email" 
-              placeholder="Your email address" 
-              className="input flex-grow" 
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="input flex-grow"
               required
             />
             <button type="submit" className="btn btn-primary whitespace-nowrap">
