@@ -16,6 +16,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import AllProducts from './pages/AllProducts';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/categories" element={<CategoriesList />} />
           <Route path="/category/:slug" element={<CategoryProducts />} />
+          <Route path="/products" element={<AllProducts />} />
           <Route path="/product/:slug" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />

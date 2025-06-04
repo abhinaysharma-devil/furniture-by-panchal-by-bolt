@@ -279,14 +279,11 @@ export const heroSlides = [
 export const aboutUsContent = {
   title: 'About Furniture By Panchal',
   description: `
-    Founded in 2005, Furniture By Panchal has been a trusted name in quality furniture for over two decades. 
-    We pride ourselves on craftsmanship, attention to detail, and customer satisfaction.
-    
-    Our mission is to provide beautiful, functional, and durable furniture that transforms houses into homes. 
-    Each piece is carefully designed and manufactured using the finest materials to ensure longevity and comfort.
-    
-    With showrooms across major cities in India, we've helped thousands of customers find the perfect furniture for their spaces.
-    We believe that everyone deserves to live in a space that reflects their personality and meets their needs.
+    FurnitureByPanchal was founded in 2025 with a simple mission: to create beautiful, functional furniture that transforms living spaces into homes. What began as a small workshop has grown into a beloved furniture brand that serves customers nationwide.
+
+Our founder, Abhinay Sharma, started with a passion for woodworking and an eye for design. He believed that furniture should not only be beautiful but also built to last for generations. This philosophy continues to guide every piece we create.
+
+Today, our team of skilled craftspeople and designers work together to create furniture that blends traditional craftsmanship with contemporary aesthetics. We're proud to have furnished thousands of homes across the country with pieces that tell a story.
   `,
   vision: 'To be India\'s most trusted furniture brand, known for quality, design, and customer service.',
   values: [
@@ -298,19 +295,19 @@ export const aboutUsContent = {
   ],
   teamMembers: [
     {
-      name: 'Rajesh Panchal',
+      name: 'Abhinay Sharma',
       position: 'Founder & CEO',
-      imgPath: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750'
+      imgPath: '/abhinay.jpeg' // Path relative to the public folder
     },
     {
-      name: 'Priya Sharma',
+      name: 'Isha Dalal',
       position: 'Head of Design',
-      imgPath: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750'
+      imgPath: '/isha.jpeg' // Path relative to the public folder
     },
     {
-      name: 'Amit Patel',
+      name: 'Devil',
       position: 'Operations Manager',
-      imgPath: 'https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750'
+      imgPath: '/abhinay2.jpeg' // Path relative to the public folder
     }
   ]
 };
@@ -318,9 +315,9 @@ export const aboutUsContent = {
 export const contactUsContent = {
   heading: 'Get in Touch',
   description: 'Have questions or need assistance? We\'re here to help! Reach out to us through any of the methods below or visit one of our showrooms.',
-  email: 'contact@furniturebypanchal.com',
+  email: 'panchalabhinay@gmail.com',
   phone: '+91 8358985420',
-  address: '123 Furniture Street, Mumbai, Maharashtra, India - 400001',
+  address: 'Kushwah Nagar, Indore, Madhya Pradesh - 452015',
   hours: 'Mon-Sat: 10:00 AM - 8:00 PM | Sun: 11:00 AM - 6:00 PM',
   showrooms: [
     {
@@ -345,3 +342,41 @@ export const contactUsContent = {
     twitter: 'https://twitter.com/furniturebypanchal'
   }
 };
+
+const mockCategories =[
+  {
+    id: 'cat1',
+    title: 'Living Room from api',
+    description: 'Stylish and comfortable furniture for your living space',
+    slug: 'living-room',
+    imgPath: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
+  },
+  {
+    id: 'cat2',
+    title: 'Bedroom',
+    description: 'Elegant and restful furniture for your personal sanctuary',
+    slug: 'bedroom',
+    imgPath: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
+  },
+  {
+    id: 'cat3',
+    title: 'Dining Room',
+    description: 'Beautiful dining sets for memorable meals with family and friends',
+    slug: 'dining-room',
+    imgPath: 'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
+  },
+  {
+    id: 'cat4',
+    title: 'Office',
+    description: 'Professional and ergonomic furniture for your workspace',
+    slug: 'office',
+    imgPath: 'https://images.pexels.com/photos/1957477/pexels-photo-1957477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
+  },
+  {
+    id: 'cat5',
+    title: 'Outdoor',
+    description: 'Durable and stylish furniture for your garden or patio',
+    slug: 'outdoor',
+    imgPath: 'https://images.pexels.com/photos/271816/pexels-photo-271816.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
+  }
+];

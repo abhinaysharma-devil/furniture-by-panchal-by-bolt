@@ -5,33 +5,33 @@ import { useAuthStore } from '../store/authStore';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login, isAuthenticated } = useAuthStore();
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     setError('');
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.email || !formData.password) {
       setError('Please enter both email and password');
       return;
     }
-    
+
     setIsLoading(true);
-    
+
     try {
       const success = await login(formData.email, formData.password);
-      
+
       if (success) {
         navigate('/profile');
       } else {
@@ -43,12 +43,12 @@ const Login: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
+
   if (isAuthenticated) {
     navigate('/profile');
     return null;
   }
-  
+
   return (
     <div className="py-16">
       <div className="container-custom max-w-md mx-auto">
@@ -56,14 +56,14 @@ const Login: React.FC = () => {
           <div className="p-6 border-b border-gray-200">
             <h1 className="text-2xl font-bold text-center">Log In to Your Account</h1>
           </div>
-          
+
           <div className="p-6">
             {error && (
               <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-md text-sm">
                 {error}
               </div>
             )}
-            
+
             <form onSubmit={handleSubmit}>
               <div className="space-y-6">
                 <div>
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
                     required
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Password
@@ -95,7 +95,7 @@ const Login: React.FC = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <input
@@ -108,12 +108,12 @@ const Login: React.FC = () => {
                       Remember me
                     </label>
                   </div>
-                  
+
                   <a href="#" className="text-sm text-primary hover:text-primary-600">
                     Forgot password?
                   </a>
                 </div>
-                
+
                 <div>
                   <button
                     type="submit"
@@ -125,7 +125,7 @@ const Login: React.FC = () => {
                 </div>
               </div>
             </form>
-            
+
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}

@@ -9,10 +9,12 @@ import axios from 'axios';
 
 const Home: React.FC = () => {
   const [data, setData] = useState(categories);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   useEffect(() => {
     const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
 
+    setCategoriesLoading(true);
     if (baseApiUrl) {
       axios.get(`${baseApiUrl}/api/categories`)
         .then(response => {
@@ -21,14 +23,42 @@ const Home: React.FC = () => {
         })
         .catch(error => {
           console.error('Error fetching categories from API:', error);
-          // Falls back to mock data if API call fails, as `data` is initialized with `categories`.
         })
         .finally(() => {
           console.log('Categories fetch attempt completed.');
+          setCategoriesLoading(false);
         });
     } else {
       console.warn('VITE_API_BASE_URL is not set. Using mock data for categories.');
-      // Continues to use mock data as `data` is initialized with `categories`.
+      setCategoriesLoading(false);
+    }
+  }, []);
+
+  const [featuredProductsData, setFeaturedProductsData] = useState(featuredProducts);
+  const [featuredProductsLoading, setFeaturedProductsLoading] = useState(true);
+
+  useEffect(() => {
+    const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
+
+    // If you want to show a loader for featured products, initialize its loading state
+    setFeaturedProductsLoading(true);
+
+    if (baseApiUrl) {
+      axios.get(`${baseApiUrl}/api/furniture-items/featured`)
+        .then(response => {
+          setFeaturedProductsData(response.data);
+          console.log('Fetched featured products from API:$$$', response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching featured products from API:', error);
+        })
+        .finally(() => {
+          console.log('Featured products fetch attempt completed.');
+          setFeaturedProductsLoading(false);
+        });
+    } else {
+      console.warn('VITE_API_BASE_URL is not set. Using mock data for featured products.');
+      setFeaturedProductsLoading(false);
     }
   }, []);
   return (
@@ -56,11 +86,18 @@ const Home: React.FC = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {(data || categories).slice(0, 3).map((category) => (
-              <CategoryCard key={category.id} category={category} />
-            ))}
-          </div>
+          {categoriesLoading ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">Loading categories...</p>
+              {/* You could add a spinner or skeleton loader here */}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(data.length > 0 ? data : categories).slice(0, 3).map((category) => (
+                <CategoryCard key={category.id} category={category} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -73,16 +110,22 @@ const Home: React.FC = () => {
               <p className="text-gray-600">Discover our most popular furniture pieces</p>
             </div>
             <Link to="/products" className="link flex items-center mt-4 md:mt-0">
-              <span>View All Products</span>
+              <span>Explore All Products</span>
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.slice(0, 4).map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+          {featuredProductsLoading ? (
+            <div className="text-center py-8">
+              <p className="text-gray-500">Loading featured products...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {(featuredProductsData.length > 0 ? featuredProductsData : featuredProducts).slice(0, 4).map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

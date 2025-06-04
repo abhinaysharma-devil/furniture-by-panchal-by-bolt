@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { AlignJustify, X, ShoppingCart, User } from 'lucide-react';
 import { useCartStore } from '../../store/cartStore';
 import { useAuthStore } from '../../store/authStore';
+import fbpLogo from '../../../public/fbp-logo-removebg-preview.png'; // Adjust the path as necessary
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,8 @@ export const Navbar: React.FC = () => {
     >
       <div className="container-custom flex items-center justify-between">
         <Link to="/" className="flex items-center">
-          <span className="text-primary font-bold text-2xl">FurnitureByPanchal</span>
+          {/* <span className="text-primary font-bold text-2xl">FurnitureByPanchal</span>   */}
+          <img src={fbpLogo} alt="" width="300px" />
         </Link>
         
         <nav className="hidden md:flex items-center space-x-6">
