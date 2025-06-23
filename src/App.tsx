@@ -1,6 +1,8 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
+import AdminLayout from './components/admin/AdminLayout';
+import AdminLogin from './components/admin/AdminLogin';
 
 // Pages
 import Home from './pages/Home';
@@ -16,29 +18,81 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import About from './pages/About';
 import Contact from './pages/Contact';
-import AllProducts from './pages/AllProducts';
+
+// Admin Pages
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminCategories from './pages/admin/Categories';
+import AdminProducts from './pages/admin/Products';
+import AdminUsers from './pages/admin/Users';
+import AdminOrders from './pages/admin/Orders';
+// index.js or App.jsx
 
 function App() {
+  const [logoClickCount, setLogoClickCount] = useState(0);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (logoClickCount >= 5) {
+      setShowAdminLogin(true);
+      setLogoClickCount(0);
+    }
+  }, [logoClickCount]);
+
+  const handleLogoClick = () => {
+    setLogoClickCount(prev => prev + 1);
+  };
+
+  const handleAdminLogin = () => {
+    setIsAdmin(true);
+    setShowAdminLogin(false);
+  };
+
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/categories" element={<CategoriesList />} />
-          <Route path="/category/:slug" element={<CategoryProducts />} />
-          <Route path="/products" element={<AllProducts />} />
-          <Route path="/product/:slug" element={<ProductDetail />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </Layout>
+      {showAdminLogin && (
+        <AdminLogin
+          onClose={() => setShowAdminLogin(false)}
+          onLogin={handleAdminLogin}
+        />
+      )}
+
+      <Routes>
+        {/* Admin Routes */}
+        {isAdmin ? (
+          <Route path="/admin\" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="categories" element={<AdminCategories />} />
+            <Route path="products" element={<AdminProducts />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="orders" element={<AdminOrders />} />
+          </Route>
+        ) : null}
+
+        {/* Public Routes */}
+        <Route
+          path="/"
+          element={<Layout onLogoClick={handleLogoClick}><Home /></Layout>}
+        />
+        <Route path="/categories" element={<Layout><CategoriesList /></Layout>} />
+        <Route path="/category/:slug" element={<Layout><CategoryProducts /></Layout>} />
+        <Route path="/product/:slug" element={<Layout><ProductDetail /></Layout>} />
+        <Route path="/cart" element={<Layout><Cart /></Layout>} />
+        <Route path="/checkout" element={<Layout><Checkout /></Layout>} />
+        <Route path="/order-confirmation/:orderId" element={<Layout><OrderConfirmation /></Layout>} />
+        <Route path="/orders" element={<Layout><Orders /></Layout>} />
+        <Route path="/profile" element={<Layout><Profile /></Layout>} />
+        <Route path="/login" element={<Layout><Login /></Layout>} />
+        <Route path="/register" element={<Layout><Register /></Layout>} />
+        <Route path="/about" element={<Layout><About /></Layout>} />
+        <Route path="/contact" element={<Layout><Contact /></Layout>} />
+
+        {/* Redirect /admin to dashboard if authenticated */}
+        <Route
+          path="/admin/*"
+          element={isAdmin ? <Navigate to="/admin" /> : <Navigate to="/" />}
+        />
+      </Routes>
     </Router>
   );
 }

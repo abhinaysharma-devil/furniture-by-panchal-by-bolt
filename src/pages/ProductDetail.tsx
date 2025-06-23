@@ -7,6 +7,7 @@ import ProductCard from '../components/ui/ProductCard';
 import { formatPrice } from '../lib/utils';
 import { useCartStore } from '../store/cartStore';
 
+
 const ProductDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [product, setProduct] = useState(furnitureItems.find(item => item.slug === slug));

@@ -19,7 +19,7 @@ const Checkout: React.FC = () => {
   const navigate = useNavigate();
   const { items, getCartTotal, clearCart } = useCartStore();
   const { createOrder } = useOrderStore();
-  
+
   const [formData, setFormData] = useState<FormData>({
     name: '',
     address: '',
@@ -30,9 +30,9 @@ const Checkout: React.FC = () => {
     email: '',
     paymentMethod: 'cod',
   });
-  
+
   const [errors, setErrors] = useState<Partial<FormData>>({});
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -41,50 +41,49 @@ const Checkout: React.FC = () => {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
   };
-  
+
   const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {};
     let isValid = true;
-    
+
     // Required fields
     const requiredFields: (keyof FormData)[] = ['name', 'address', 'city', 'state', 'pincode', 'phone', 'email'];
-    
+
     requiredFields.forEach(field => {
       if (!formData[field]) {
         newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1)} is required`;
         isValid = false;
       }
     });
-    
+
     // Phone validation
     if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
       newErrors.phone = 'Please enter a valid 10-digit phone number';
       isValid = false;
     }
-    
+
     // Email validation
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
       isValid = false;
     }
-    
+
     // Pincode validation
     if (formData.pincode && !/^\d{6}$/.test(formData.pincode)) {
       newErrors.pincode = 'Please enter a valid 6-digit pincode';
       isValid = false;
     }
-    
+
     setErrors(newErrors);
     return isValid;
   };
-  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateForm()) {
       return;
     }
-    
+
     // Create the order
     const orderId = createOrder({
       name: formData.name,
@@ -94,23 +93,25 @@ const Checkout: React.FC = () => {
       pincode: formData.pincode,
       phone: formData.phone,
     });
-    
+
+    console.log("Form Data:", formData);
+
     if (orderId) {
       // Redirect to confirmation page
       navigate(`/order-confirmation/${orderId}`);
     }
   };
-  
+
   if (items.length === 0) {
     navigate('/cart');
     return null;
   }
-  
+
   return (
     <div className="py-16">
       <div className="container-custom max-w-6xl">
         <h1 className="text-3xl font-bold mb-8">Checkout</h1>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Checkout Form */}
           <div className="lg:col-span-2">
@@ -119,7 +120,7 @@ const Checkout: React.FC = () => {
                 <div className="p-6 border-b border-gray-200">
                   <h2 className="text-lg font-semibold">Shipping Information</h2>
                 </div>
-                
+
                 <div className="p-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div>
@@ -138,7 +139,7 @@ const Checkout: React.FC = () => {
                         <p className="text-red-500 text-xs mt-1">{errors.name}</p>
                       )}
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Phone Number *
@@ -155,7 +156,7 @@ const Checkout: React.FC = () => {
                         <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
                       )}
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Email *
@@ -172,7 +173,7 @@ const Checkout: React.FC = () => {
                         <p className="text-red-500 text-xs mt-1">{errors.email}</p>
                       )}
                     </div>
-                    
+
                     <div className="sm:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Address *
@@ -189,7 +190,7 @@ const Checkout: React.FC = () => {
                         <p className="text-red-500 text-xs mt-1">{errors.address}</p>
                       )}
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         City *
@@ -206,7 +207,7 @@ const Checkout: React.FC = () => {
                         <p className="text-red-500 text-xs mt-1">{errors.city}</p>
                       )}
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         State *
@@ -223,7 +224,7 @@ const Checkout: React.FC = () => {
                         <p className="text-red-500 text-xs mt-1">{errors.state}</p>
                       )}
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Pincode *
@@ -243,12 +244,12 @@ const Checkout: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-6 border-b border-gray-200">
                   <h2 className="text-lg font-semibold">Payment Method</h2>
                 </div>
-                
+
                 <div className="p-6">
                   <div className="space-y-4">
                     <label className="flex items-center space-x-3">
@@ -262,7 +263,7 @@ const Checkout: React.FC = () => {
                       />
                       <span>Cash on Delivery</span>
                     </label>
-                    
+
                     <label className="flex items-center space-x-3">
                       <input
                         type="radio"
@@ -277,33 +278,28 @@ const Checkout: React.FC = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="mt-8 lg:hidden">
-                <button 
-                  type="submit" 
-                  className="btn btn-primary w-full py-3"
-                >
-                  Place Order
-                </button>
+                <button type="submit" className="btn btn-primary w-full py-3" onClick={() => { console.log("Place Order") }}> Place Order </button>
               </div>
             </form>
           </div>
-          
+
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden sticky top-24">
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold">Order Summary</h2>
               </div>
-              
+
               <div className="p-6">
                 <div className="max-h-64 overflow-y-auto mb-4">
                   {items.map(item => (
                     <div key={item.id} className="flex items-center mb-4">
                       <div className="w-16 h-16 rounded overflow-hidden flex-shrink-0 mr-4">
-                        <img 
-                          src={item.item.imgPath} 
-                          alt={item.item.title} 
+                        <img
+                          src={item.item.imgPath}
+                          alt={item.item.title}
                           className="w-full h-full object-cover"
                         />
                       </div>
@@ -315,7 +311,7 @@ const Checkout: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="space-y-4 border-t border-gray-200 pt-4">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal</span>
@@ -331,31 +327,31 @@ const Checkout: React.FC = () => {
                     <span className="text-gray-600">Tax (GST 18%)</span>
                     <span className="font-medium">{formatPrice(getCartTotal() * 0.18)}</span>
                   </div>
-                  
+
                   <div className="border-t border-gray-200 pt-4 mt-4">
                     <div className="flex justify-between font-semibold text-lg">
                       <span>Total</span>
                       <span className="text-primary">
                         {formatPrice(
-                          getCartTotal() + 
-                          (getCartTotal() > 25000 ? 0 : 500) + 
+                          getCartTotal() +
+                          (getCartTotal() > 25000 ? 0 : 500) +
                           (getCartTotal() * 0.18)
                         )}
                       </span>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="mt-6 hidden lg:block">
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="btn btn-primary w-full py-3"
                     onClick={handleSubmit}
                   >
                     Place Order
                   </button>
                 </div>
-                
+
                 <div className="mt-6 text-xs text-gray-500">
                   <p>
                     By placing your order, you agree to our <a href="#" className="text-primary">Terms of Service</a> and <a href="#" className="text-primary">Privacy Policy</a>.

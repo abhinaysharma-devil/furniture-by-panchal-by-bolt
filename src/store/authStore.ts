@@ -3,9 +3,14 @@ import { persist } from 'zustand/middleware';
 import { User } from '../lib/types';
 import axios from 'axios';
 
+
+
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+  // bearerToken: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string, mobile?: string) => Promise<boolean>;
   logout: () => void;
@@ -29,7 +34,10 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      
+      bearerToken: null,
+      isLoading: false,
+      error: null,
+
       login: async (email: string, password: string) => {
         const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
         if (!baseApiUrl) {
@@ -43,14 +51,9 @@ export const useAuthStore = create<AuthState>()(
             password,
           });
 
-          console.log('response>>>>>>>>>>>>>>>>>', response)
-
           if (response) {
-            set({ user: response.data, isAuthenticated: true });
-            // Optionally, store the token if your app uses it (e.g., in localStorage or an httpOnly cookie handled by the server)
-            // For this example, we'll assume the token is handled or not directly needed in the frontend store after login.
-            // If you need to store it: localStorage.setItem('authToken', response.data.token);
-            console.log('Login successful:', response.data.user);
+            set({ user: response.data.user, isAuthenticated: true });
+            localStorage.setItem('authToken', response.data.token)
             return true;
           } else {
             console.error('Login failed: Invalid response from server.', response);
@@ -65,63 +68,83 @@ export const useAuthStore = create<AuthState>()(
           return false;
         }
       },
-      
-      register: async (name: string, email: string, password: string, mobile?: string) => {
-        // Mock registration - in a real app, this would call an API
+
+      register: async (userData) => {
+        set({ isLoading: true, error: null });
         try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          
-          if (name && email && password) {
+          const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
+          console.log('userData 00000', userData)
+
+
+    
+          const response = await axios.post<{ user: User; token: string }>(
+            `${baseApiUrl}/api/auth/register`,
+            userData
+          );
+
+          if (response.data && response.data.user && response.data.token) {
+            localStorage.setItem('authToken', response.data.token)
             set({
-              user: {
-                id: `user-${Date.now()}`,
-                name,
-                email,
-                mobile,
-              },
+              user: response.data.user,
               isAuthenticated: true,
+              isLoading: false,
+              error: null,
             });
             return true;
           }
+          set({ isLoading: false, error: 'Registration failed: Invalid response from server.' });
           return false;
         } catch (error) {
-          console.error('Registration failed:', error);
+          let errorMessage = 'An unknown error occurred during registration.';
+          if (axios.isAxiosError(error)) {
+            errorMessage = error.response?.data?.message || error.message || 'Registration failed.';
+            console.error('Registration error:', error.response?.data || error.message);
+          } else {
+            console.error('Unexpected registration error:', error);
+          }
+          set({ isLoading: false, error: errorMessage, isAuthenticated: false, user: null });
           return false;
         }
       },
-      
+
       logout: () => {
         set({ user: null, isAuthenticated: false });
         // If you stored a token, remove it on logout
         // localStorage.removeItem('authToken');
         console.log('User logged out.');
       },
-      
-      // updateProfile: (updates: Partial<User>) => {
-      //   set((state) => ({
-      //     user: state.user ? { ...state.user, ...updates } : null,
-      //   }));
-      // },
-       updateProfile: async (updates: Partial<User>) => {
+      updateProfile: async (updates: Partial<User>) => {
         const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
+        const token = localStorage.getItem('authToken'); // Or wherever you're storing the token
+
         if (!baseApiUrl) {
           console.error('VITE_API_BASE_URL is not defined. Cannot make API call.');
           return false;
         }
 
-        try {
-          // Assuming your API expects a PUT/PATCH request to update the profile
-          // And that it requires authentication (e.g., a token sent in headers, or session cookie)
-          // Axios instance might need to be configured with credentials or auth token interceptor
-          const response = await axios.put<UpdateProfileResponse>(`${baseApiUrl}/api/auth/profile`, updates);
+        if (!token) {
+          console.error('No auth token found. Cannot make authorized request.');
+          return false;
+        }
 
-          console.log('first>>>>>>>>>>>>>>>>>', response);
+        try {
+          const response = await axios.put<UpdateProfileResponse>(
+            `${baseApiUrl}/api/auth/profile`,
+            updates,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`, // 👈 Attach the token here
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+
           if (response) {
-            set({ user: response.data, isAuthenticated: true });
+            set({ user: response.data.user, isAuthenticated: true });
             console.log('Profile updated successfully:', response.data);
             return true;
           }
+
           console.error('Profile update failed: Invalid response from server.', response);
           return false;
         } catch (error) {
@@ -133,6 +156,7 @@ export const useAuthStore = create<AuthState>()(
           return false;
         }
       }
+
     }),
     {
       name: 'furniture-auth-storage',

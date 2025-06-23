@@ -51,7 +51,7 @@ export const furnitureItems: FurnitureItem[] = [
   {
     id: 'item1',
     categoryId: 'cat1',
-    title: 'Modern Leather Sofa',
+    title: 'Modern Leather Sofa from static',
     price: 45999,
     description: 'A luxurious 3-seater leather sofa with chrome legs, perfect for contemporary living rooms.',
     imgPath: 'https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
@@ -321,19 +321,9 @@ export const contactUsContent = {
   hours: 'Mon-Sat: 10:00 AM - 8:00 PM | Sun: 11:00 AM - 6:00 PM',
   showrooms: [
     {
-      city: 'Mumbai',
-      address: '123 Furniture Street, Andheri West, Mumbai - 400053',
-      phone: '+91 98765 43210'
-    },
-    {
-      city: 'Delhi',
-      address: '456 Home Avenue, Connaught Place, New Delhi - 110001',
-      phone: '+91 98765 43211'
-    },
-    {
-      city: 'Bangalore',
-      address: '789 Decor Road, Indiranagar, Bangalore - 560038',
-      phone: '+91 98765 43212'
+      city: 'Indore',
+      address: 'Kushwah nagar, Indore - 452015',
+      phone: '+91 83589 85420'
     }
   ],
   socialMedia: {

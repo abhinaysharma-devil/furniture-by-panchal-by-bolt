@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.80.7",
     "axios": "^1.9.0",
     "clsx": "^2.1.0",
     "furniture-by-panchal": "file:",
