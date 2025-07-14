@@ -27,9 +27,9 @@ import AdminProducts from './pages/admin/Products';
 import AdminUsers from './pages/admin/Users';
 import AdminOrders from './pages/admin/Orders';
 import PrivacyPolicy from './pages/privacyPolicy';
-import TermsAndConditions from './pages/termAndConditions';
-import ShippingPolicy from './pages/shippingPolicy';
-import OtpVerification from './pages/otpVerification';
+import TermsAndConditions from './pages/TermAndConditions';
+import ShippingPolicy from './pages/ShippingPolicy';
+// import OtpVerification from './pages/otpVerification';
 // index.js or App.jsx
 
 function App() {
@@ -94,7 +94,7 @@ function App() {
         <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
         <Route path="/t&c" element={<Layout><TermsAndConditions /></Layout>} />
         <Route path="/shipping-policy" element={<Layout><ShippingPolicy /></Layout>} />
-        <Route path="/verify-otp" element={<Layout><OtpVerification /></Layout>} />
+        {/* <Route path="/verify-otp" element={<Layout><OtpVerification /></Layout>} /> */}
 
         {/* Redirect /admin to dashboard if authenticated */}
         <Route path="/admin/*" element={isAdmin ? <Layout><Admin /></Layout> : <Navigate to="/" />} />
