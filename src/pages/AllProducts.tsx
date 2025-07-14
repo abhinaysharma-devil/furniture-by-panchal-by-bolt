@@ -22,7 +22,6 @@ const AllProducts: React.FC = () => {
         .then(response => {
           setProducts(response.data);
           setInitialProducts(response.data); // Store for default sort
-          console.log('Fetched all products from API:$$$', response.data);
         })
         .catch(error => {
           console.error('Error fetching all products from API:', error);

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCartStore } from '../store/cartStore';
-import { useOrderStore } from '../store/orderStore';
+// import { useCartStore } from '../store/cartStore';
+// import { useOrderStore } from '../store/orderStore';
 import { formatPrice } from '../lib/utils';
+import { useCreateOrder, useGetCartDetail } from '../apis/apiHooks';
 
 interface FormData {
   name: string;
@@ -17,8 +18,16 @@ interface FormData {
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
-  const { items, getCartTotal, clearCart } = useCartStore();
-  const { createOrder } = useOrderStore();
+
+  const { data: cartItems } = useGetCartDetail();
+
+  const { mutateAsync: createOrder } = useCreateOrder();
+
+  const getCartTotal = () => {
+    return cartItems.reduce(
+      (total, item) => total + item.quantity * item.item.price, 0
+    );
+  }
 
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -78,14 +87,16 @@ const Checkout: React.FC = () => {
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
       return;
     }
 
-    // Create the order
-    const orderId = createOrder({
+    console.log('Form submitted:create order', formData);
+
+    // // Create the order
+    let orderId = await createOrder<FormData>({
       name: formData.name,
       address: formData.address,
       city: formData.city,
@@ -94,7 +105,11 @@ const Checkout: React.FC = () => {
       phone: formData.phone,
     });
 
-    console.log("Form Data:", formData);
+
+    console.log('orderId>>>>>>>>>>>>>>', orderId);
+    
+
+    orderId = orderId?.id
 
     if (orderId) {
       // Redirect to confirmation page
@@ -102,10 +117,14 @@ const Checkout: React.FC = () => {
     }
   };
 
-  if (items.length === 0) {
-    navigate('/cart');
-    return null;
-  }
+  // Redirect to cart if cart is empty
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      navigate('/cart');
+    }
+  }, [cartItems, navigate]);
+
+  if (cartItems.length === 0) return null;
 
   return (
     <div className="py-16">
@@ -294,7 +313,7 @@ const Checkout: React.FC = () => {
 
               <div className="p-6">
                 <div className="max-h-64 overflow-y-auto mb-4">
-                  {items.map(item => (
+                  {cartItems.map(item => (
                     <div key={item.id} className="flex items-center mb-4">
                       <div className="w-16 h-16 rounded overflow-hidden flex-shrink-0 mr-4">
                         <img

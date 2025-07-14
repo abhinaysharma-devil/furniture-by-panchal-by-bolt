@@ -2,33 +2,16 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { CheckCircle, Box, Truck, Calendar, ArrowRight } from 'lucide-react';
 import { formatPrice } from '../lib/utils';
-import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
-
-const fetchOrderById = async (orderId: string) => {
-  const token = localStorage.getItem('authToken');
-  const res = await axios.get(`http://localhost:5000/api/orders/${orderId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`, // 👈 Attach the token here
-      'Content-Type': 'application/json'
-    }
-  });
-  return res.data;
-};
+import { useGetOrderById } from '../apis/apiHooks';
+import { Skeleton } from "antd";
 
 const OrderConfirmation: React.FC = () => {
+
   const { orderId } = useParams<{ orderId: string }>();
 
-  const { data: orderByIdData, isLoading, error } = useQuery({
-    queryKey: ['order', orderId], // Specific query key including orderId
-    queryFn: () => {
-      // orderId will be a string here because of the 'enabled' option
-      return fetchOrderById(orderId as string);
-    },
-    enabled: !!orderId, // Only run query if orderId is available
-  });
+  const { data: orderByIdData, isLoading, error } = useGetOrderById(orderId || '');
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Skeleton active />;
   if (error) return <p>Error: {error.message}</p>;
 
   if (!orderByIdData) {
@@ -143,12 +126,12 @@ const OrderConfirmation: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p className="font-medium">{JSON.parse(orderByIdData.orderDetails).shippingAddress.name}</p>
-                  <p>{JSON.parse(orderByIdData.orderDetails).shippingAddress.address}</p>
+                  <p className="font-medium">{JSON.parse(orderByIdData.orderDetails)?.shippingAddress?.name}</p>
+                  <p>{JSON.parse(orderByIdData.orderDetails)?.shippingAddress?.address}</p>
                   <p>
-                    {JSON.parse(orderByIdData.orderDetails).shippingAddress.city}, {JSON.parse(orderByIdData.orderDetails).shippingAddress.state} - {JSON.parse(orderByIdData.orderDetails).shippingAddress.pincode}
+                    {JSON.parse(orderByIdData.orderDetails)?.shippingAddress?.city}, {JSON.parse(orderByIdData.orderDetails)?.shippingAddress?.state} - {JSON.parse(orderByIdData.orderDetails)?.shippingAddress?.pincode}
                   </p>
-                  <p>Phone: {JSON.parse(orderByIdData.orderDetails).shippingAddress.phone}</p>
+                  <p>Phone: {JSON.parse(orderByIdData.orderDetails)?.shippingAddress?.phone}</p>
                 </div>
 
                 <div className="md:text-right">

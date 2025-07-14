@@ -55,8 +55,6 @@ const Register: React.FC = () => {
         formData.password,
         formData.mobile
       );
-
-      console.log('formData >>>>>>>>>>', formData)
       
       if (success) {
         navigate('/profile');

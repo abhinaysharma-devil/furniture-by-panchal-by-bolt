@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.80.7",
+    "antd": "^5.26.3",
     "axios": "^1.9.0",
     "clsx": "^2.1.0",
     "furniture-by-panchal": "file:",
     "lucide-react": "^0.344.0",
+    "notistack": "^3.0.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.22.3",

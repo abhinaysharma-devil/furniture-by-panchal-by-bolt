@@ -6,6 +6,8 @@ import ProductCard from '../components/ui/ProductCard';
 import CategoryCard from '../components/ui/CategoryCard';
 import { heroSlides, categories, featuredProducts } from '../data/mockData';
 import axios from 'axios';
+import { useAddSubsEmail } from '../apis/apiHooks';
+import { enqueueSnackbar } from 'notistack';
 
 const Home: React.FC = () => {
   const [data, setData] = useState(categories);
@@ -19,13 +21,13 @@ const Home: React.FC = () => {
       axios.get(`${baseApiUrl}/api/categories`)
         .then(response => {
           setData(response.data);
-          console.log('Fetched categories from API:$$$', response.data);
+          // console.log('Fetched categories from API:$$$', response.data);
         })
         .catch(error => {
           console.error('Error fetching categories from API:', error);
         })
         .finally(() => {
-          console.log('Categories fetch attempt completed.');
+          // console.log('Categories fetch attempt completed.');
           setCategoriesLoading(false);
         });
     } else {
@@ -47,7 +49,7 @@ const Home: React.FC = () => {
       axios.get(`${baseApiUrl}/api/furniture-items/featured`)
         .then(response => {
           setFeaturedProductsData(response.data);
-          console.log('Fetched featured products from API:$$$', response.data);
+          // console.log('Fetched featured products from API:$$$', response.data);
         })
         .catch(error => {
           console.error('Error fetching featured products from API:', error);
@@ -61,6 +63,28 @@ const Home: React.FC = () => {
       setFeaturedProductsLoading(false);
     }
   }, []);
+
+  const [email, setEmail] = useState('');
+
+  const {
+    mutateAsync: addSubsEmail,
+    // isLoading: isAddingEmail,
+    // isError: isAddEmailError,
+    isSuccess: isAddEmailSuccess
+  } = useAddSubsEmail();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      addSubsEmail({
+        email
+      });
+    }
+    if (isAddEmailSuccess) {
+      setEmail(''); // Clear the email input after successful submission
+      enqueueSnackbar("Email added Successfully", { variant: "success" });
+    }
+  };
   return (
     <div>
       {/* Hero Section */}
@@ -197,9 +221,11 @@ const Home: React.FC = () => {
           <p className="text-gray-600 mb-8">
             Subscribe to our newsletter for the latest product updates, exclusive offers, and interior design tips.
           </p>
-          <form className="flex flex-col sm:flex-row gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Your email address"
               className="input flex-grow"
               required

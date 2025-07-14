@@ -9,7 +9,7 @@ interface CategoryCardProps {
 }
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ category, className = '' }) => {
-  console.log('category:', category);
+// console.log('category', category)
   return (
     <Link
       to={`/category/${category.slug}`}

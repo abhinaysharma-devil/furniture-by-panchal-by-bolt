@@ -1,15 +1,75 @@
 import callAxios from "./axiosMethod.ts";
 
+/******************************* Items ******************************/
 
-// const addItem = async (id : number, quantity : string) => {
-//     try {
-//         await callAxios("POST", "/api/cart", { id, quantity })
+const fetchItems = async (payload: any) => {
 
-//         return true;
-//     } catch (error) {
-//         throw error
-//     }
-// }
+    let response = await callAxios("GET", `/api/category/items?slug=${payload}`)
+
+    return response;
+};
+
+const fetchItemBySlug = async (payload: any) => {
+
+    let response = await callAxios("GET", `/api/item/detailBySlug?slug=${payload}`)
+
+    return response;
+};
+
+const fetchCategory = async () => {
+
+    let response = await callAxios("GET", `/api/category/list`)
+
+    return response;
+};
+
+/******************************* Cart *******************************/
+
+const addItemsInCart = async (payload: any) => {
+    try {
+        let response = await callAxios("POST", "/api/cart/add", payload)
+
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
+const getCartDetail = async () => {
+
+    let response = await callAxios("GET", "/api/cart/get")
+
+    return response;
+};
+
+const updateCartItemQuantity = async (payload: any) => {
+    try {
+        let response = await callAxios("PUT", "/api/cart/update", payload)
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
+const clearCartItems = async () => {
+    try {
+        let response = await callAxios("DELETE", "/api/cart/clear")
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
+const clearCartItemById = async (id: string) => {
+    try {
+        let response = await callAxios("DELETE", `/api/cart/clearCartItems/${id}`)
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
+/******************************* Orders ******************************/
 
 const fetchOrders = async () => {
 
@@ -18,8 +78,16 @@ const fetchOrders = async () => {
     return response;
 };
 
-const cancelOrder = async (payload : any) => {
-    
+const fetchOrderById = async (orderId: string) => {
+
+    let response = await callAxios("GET", `/api/orders/${orderId}`)
+
+    return response;
+};
+
+
+const cancelOrder = async (payload: any) => {
+
     try {
 
         await callAxios("PUT", "/api/orders/changeStatus", payload)
@@ -30,4 +98,44 @@ const cancelOrder = async (payload : any) => {
     }
 }
 
-export { fetchOrders, cancelOrder }
+const createOrder = async (payload: any) => {
+
+    try {
+
+        let response = await callAxios("POST", "/api/orders", payload)
+
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
+/******************************* Other Stuff ******************************/
+
+const addSubsEmail = async (payload: any) => {
+
+    try {
+
+        let response = await callAxios("POST", "/api/stuff/addSubsEmail", payload)
+
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
+/******************************* ADMIN ******************************/
+
+/******************************* Users ******************************/
+
+
+const getUsersList = async () => {
+
+    let response = await callAxios("GET", "/api/user/list")
+
+    return response;
+};
+
+
+
+export { fetchOrders, cancelOrder, createOrder, addItemsInCart, fetchItems, fetchCategory, fetchItemBySlug, getCartDetail, addSubsEmail, updateCartItemQuantity, clearCartItems, clearCartItemById, fetchOrderById, getUsersList }

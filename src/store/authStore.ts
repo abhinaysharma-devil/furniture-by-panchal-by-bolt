@@ -73,7 +73,6 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true, error: null });
         try {
           const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
-          console.log('userData 00000', userData)
 
 
     
@@ -141,7 +140,7 @@ export const useAuthStore = create<AuthState>()(
 
           if (response) {
             set({ user: response.data.user, isAuthenticated: true });
-            console.log('Profile updated successfully:', response.data);
+            // console.log('Profile updated successfully:', response.data);
             return true;
           }
 

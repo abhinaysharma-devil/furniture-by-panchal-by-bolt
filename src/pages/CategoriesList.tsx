@@ -16,14 +16,13 @@ const CategoriesList: React.FC = () => {
       axios.get(`${baseApiUrl}/api/categories`)
         .then(response => {
           setData(response.data);
-          console.log('Fetched categories from API:$$$', response.data);
         })
         .catch(error => {
           console.error('Error fetching categories from API:', error);
           // Falls back to mock data if API call fails, as `data` is initialized with `categories`.
         })
         .finally(() => {
-          console.log('Categories fetch attempt completed.');
+
           setIsLoading(false);
         });
     } else {

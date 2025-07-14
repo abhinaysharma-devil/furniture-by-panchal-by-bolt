@@ -18,6 +18,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Admin from './components/admin/AdminLayout';
+// import AdminDashboard from './pages/admin/Dashboard';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
@@ -25,12 +27,14 @@ import AdminCategories from './pages/admin/Categories';
 import AdminProducts from './pages/admin/Products';
 import AdminUsers from './pages/admin/Users';
 import AdminOrders from './pages/admin/Orders';
+import PrivacyPolicy from './pages/privacyPolicy';
+import TermsAndConditions from './pages/termAndConditions';
 // index.js or App.jsx
 
 function App() {
   const [logoClickCount, setLogoClickCount] = useState(0);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
 
   useEffect(() => {
     if (logoClickCount >= 5) {
@@ -60,7 +64,7 @@ function App() {
       <Routes>
         {/* Admin Routes */}
         {isAdmin ? (
-          <Route path="/admin\" element={<AdminLayout />}>
+          <Route path="/admin/" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="categories" element={<AdminCategories />} />
             <Route path="products" element={<AdminProducts />} />
@@ -86,12 +90,11 @@ function App() {
         <Route path="/register" element={<Layout><Register /></Layout>} />
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
+        <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
+        <Route path="/t&c" element={<Layout><TermsAndConditions /></Layout>} />
 
         {/* Redirect /admin to dashboard if authenticated */}
-        <Route
-          path="/admin/*"
-          element={isAdmin ? <Navigate to="/admin" /> : <Navigate to="/" />}
-        />
+        <Route path="/admin/*" element={isAdmin ? <Layout><Admin /></Layout> : <Navigate to="/" />} />
       </Routes>
     </Router>
   );

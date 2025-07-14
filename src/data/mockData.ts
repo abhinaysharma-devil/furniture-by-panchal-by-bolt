@@ -69,7 +69,7 @@ export const furnitureItems: FurnitureItem[] = [
   {
     id: 'item2',
     categoryId: 'cat1',
-    title: 'Minimalist Coffee Table',
+    title: 'Minimalist Coffee Table xx',
     price: 12999,
     description: 'A sleek wooden coffee table with a drawer for storage, ideal for modern living spaces.',
     imgPath: 'https://images.pexels.com/photos/1866149/pexels-photo-1866149.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',

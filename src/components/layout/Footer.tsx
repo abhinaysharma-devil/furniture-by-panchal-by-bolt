@@ -62,6 +62,12 @@ const Footer: React.FC = () => {
               <li>
                 <Link to="/profile" className="hover:text-primary transition-colors">My Account</Link>
               </li>
+              <li>
+                <Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+              </li>
+               <li>
+                <Link to="/t&c" className="hover:text-primary transition-colors">Term & Conditions</Link>
+              </li>
             </ul>
           </div>
           

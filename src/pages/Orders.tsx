@@ -2,46 +2,62 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatPrice } from '../lib/utils';
 import { ShoppingBag, Eye, Package } from 'lucide-react';
-import { getAllOrdersHook, cancelOrderHook } from '../apis/apiHooks.js';
+import { useGetAllOrders, useCancelOrder } from '../apis/apiHooks.js';
+import { useSnackbar } from "notistack";
+import { Skeleton } from "antd";
 
 const Orders: React.FC = () => {
 
-  const [orders, setOrders] = useState([])
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [orders, setOrders] = useState([]);
 
   const {
     data: getAllOrders,
     isLoading: isOrdersLoading,
-    error: orderError } = getAllOrdersHook()
+    error: orderError,
+    refetch: refetchOrders
+  } = useGetAllOrders();
 
-    let payload
+  useEffect(() => {
+    if (getAllOrders) {
+      setOrders(getAllOrders);
+    }
+  }, [getAllOrders]);
 
   const {
-    data: getAllOrd,
-    isLoading: isOrdersLoadi,
-    error: orderErro } = cancelOrderHook(payload)
+    mutateAsync: updateOrderStatus,
+    // status: orderStatus,
+    // isError: isOrderUpdateError,
+    error: updateOrderError,
+  } = useCancelOrder();
 
-  const handleCancelOrder = (orderId: string) => {
-    const confirmed = window.confirm('Are you sure you want to cancel this order?');
+  if (updateOrderError) {
+    enqueueSnackbar(updateOrderError.message, { variant: "error" });
+  }
+
+  const handleCancelOrder = async (orderId: string) => {
+    const confirmed = window.confirm("Are you sure you want to cancel this order?");
     if (confirmed) {
-      cancelOrderHook({
-        orderId,
-        status: "cancelled"
-      })
+      await updateOrderStatus({ orderId, status: "cancelled" })
+        .then((res) => {
+          if (res) refetchOrders();
+          enqueueSnackbar("Status Change Successfully", { variant: "success" });
+        }).catch((err) => {
+          enqueueSnackbar(err.message, { variant: "error" });
+        })
+      // Optionally refetch or remove the cancelled order from state
     }
   };
 
-  useEffect(() => {
-    setOrders(getAllOrders)
-  }, [getAllOrders])
-
-  if (isOrdersLoading) return <p>Loading...</p>;
+  if (isOrdersLoading) return <Skeleton active />;
   if (orderError) return <p>Error: {orderError.message}</p>;
 
-  if (orders?.length === 0) {
+  if (!orders || orders.length === 0) {
     return (
       <div className="py-16">
         <div className="container-custom max-w-4xl mx-auto">
-          <div className="text-center py-12">
+          <div className="text-center y-12">
             <ShoppingBag className="w-16 h-16 mx-auto text-gray-300 mb-4" />
             <h1 className="text-2xl font-bold mb-4">No Orders Yet</h1>
             <p className="text-gray-600 mb-8">You haven't placed any orders yet.</p>
@@ -53,17 +69,14 @@ const Orders: React.FC = () => {
       </div>
     );
   }
-
   return (
     <div className="py-16">
       <div className="container-custom max-w-4xl">
         <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
-
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-lg font-semibold">Order History</h2>
           </div>
-
           <div className="divide-y divide-gray-200">
             {orders?.map((order: any) => (
               <div key={order.id} className="p-6">
@@ -71,36 +84,34 @@ const Orders: React.FC = () => {
                   <div>
                     <p className="font-medium">Order #{order.id}</p>
                     <p className="text-sm text-gray-600">
-                      Placed on {new Date(order.createdAt).toLocaleDateString('en-IN', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
+                      Placed on{" "}
+                      {new Date(order.createdAt).toLocaleDateString("en-IN", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
                       })}
                     </p>
                   </div>
-
                   <div className="mt-2 sm:mt-0">
                     <span
-                      className={`inline-block px-3 py-1 text-xs font-medium rounded-full capitalize ${order.status === 'delivered'
-                        ? 'bg-green-100 text-green-800'
-                        : order.status === 'shipped'
-                          ? 'bg-blue-100 text-blue-800'
-                          : order.status === 'cancelled'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                      className={`inline-block px-3 py-1 text-xs font-medium rounded-full capitalize ${order.status === "delivered"
+                        ? "bg-green-100 text-green-800"
+                        : order.status === "shipped"
+                          ? "bg-blue-100 text-blue-800"
+                          : order.status === "cancelled"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-yellow-100 text-yellow-800"
                         }`}
                     >
                       {order.status}
                     </span>
                   </div>
                 </div>
-
                 <div className="border border-gray-200 rounded-lg p-4 mb-4">
                   <div className="flex items-center mb-2">
                     <Package className="h-5 w-5 text-primary mr-2" />
                     <span className="font-medium">Items in this order</span>
                   </div>
-
                   <div className="divide-y divide-gray-100">
                     {JSON.parse(order.orderDetails).items?.map((item: any, index: any) => (
                       <div key={index} className="py-2 flex justify-between">
@@ -113,12 +124,10 @@ const Orders: React.FC = () => {
                     ))}
                   </div>
                 </div>
-
                 <div className="flex flex-wrap justify-between items-center">
                   <p className="font-semibold">
                     Total: <span className="text-primary">{formatPrice(JSON.parse(order.orderDetails).total)}</span>
                   </p>
-
                   <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
                     <Link
                       to={`/order-confirmation/${order.id}`}
@@ -127,8 +136,7 @@ const Orders: React.FC = () => {
                       <Eye className="h-4 w-4 mr-1" />
                       View Details
                     </Link>
-
-                    {order.status === 'processing' && (
+                    {order.status === "processing" && (
                       <button
                         onClick={() => handleCancelOrder(order.id)}
                         className="btn py-2 px-4 text-sm bg-red-50 text-red-600 hover:bg-red-100"

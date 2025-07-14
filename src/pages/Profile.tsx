@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { User, Settings, LogOut } from 'lucide-react';
@@ -28,7 +28,7 @@ const Profile: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-     setIsSubmitting(true);
+    setIsSubmitting(true);
     setError('');
     setSuccessMessage('');
 
@@ -47,10 +47,6 @@ const Profile: React.FC = () => {
     navigate('/login');
   };
 
-  if (!isAuthenticated || !user) {
-    navigate('/login');
-    return null;
-  }
   // Sync formData if user object changes from store (e.g., after successful login/update)
   // and not currently editing to avoid overwriting user input.
   React.useEffect(() => {
@@ -58,6 +54,15 @@ const Profile: React.FC = () => {
       setFormData({ name: user.name, email: user.email, mobile: user.mobile || '' });
     }
   }, [user, isEditing]);
+
+  
+  useEffect(() => {
+    if (!isAuthenticated || !user) {
+      console.log('first>>>>>>>>>>>>>>>>>>>>>')
+      navigate('/login');
+      // return null;
+    }
+  }, []);
   return (
     <div className="py-16">
       <div className="container-custom max-w-4xl">
@@ -71,8 +76,8 @@ const Profile: React.FC = () => {
                 <div className="inline-flex items-center justify-center h-20 w-20 rounded-full bg-primary-100 text-primary mb-4">
                   <User className="h-10 w-10" />
                 </div>
-                <h2 className="text-xl font-semibold">{user.name}</h2>
-                <p className="text-gray-600 text-sm">{user.email}</p>
+                <h2 className="text-xl font-semibold">{user?.name}</h2>
+                <p className="text-gray-600 text-sm">{user?.email}</p>
               </div>
 
               <div className="p-4">
@@ -194,17 +199,17 @@ const Profile: React.FC = () => {
                   <div className="space-y-6">
                     <div>
                       <h3 className="text-sm font-medium text-gray-500 mb-1">Full Name</h3>
-                      <p>{user.name}</p>
+                      <p>{user?.name}</p>
                     </div>
 
                     <div>
                       <h3 className="text-sm font-medium text-gray-500 mb-1">Email Address</h3>
-                      <p>{user.email}</p>
+                      <p>{user?.email}</p>
                     </div>
 
                     <div>
                       <h3 className="text-sm font-medium text-gray-500 mb-1">Mobile Number</h3>
-                      <p>{user.mobile || 'Not provided'}</p>
+                      <p>{user?.mobile || 'Not provided'}</p>
                     </div>
                   </div>
                 )}

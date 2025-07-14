@@ -61,7 +61,7 @@ const AdminLayout: React.FC = () => {
                 className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md w-full"
               >
                 <LogOut className="h-5 w-5 mr-3" />
-                Logout
+                Logout 
               </button>
             </div>
           </div>
