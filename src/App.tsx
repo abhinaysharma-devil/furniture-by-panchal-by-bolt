@@ -27,7 +27,7 @@ import AdminProducts from './pages/admin/Products';
 import AdminUsers from './pages/admin/Users';
 import AdminOrders from './pages/admin/Orders';
 import PrivacyPolicy from './pages/privacyPolicy';
-// import TermsAndConditions from './pages/TermAndConditions'; 
+import TermsAndConditions from './pages/TermAndConditions'; 
 import ShippingPolicy from './pages/ShippingPolicy';
 // import OtpVerification from './pages/otpVerification';
 // index.js or App.jsx
@@ -92,7 +92,7 @@ function App() {
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
-        {/* <Route path="/t&c" element={<Layout><TermsAndConditions /></Layout>} /> */}
+        <Route path="/t&c" element={<Layout><TermsAndConditions /></Layout>} />
         <Route path="/shipping-policy" element={<Layout><ShippingPolicy /></Layout>} />
         {/* <Route path="/verify-otp" element={<Layout><OtpVerification /></Layout>} /> */}
 
