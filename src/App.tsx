@@ -74,7 +74,7 @@ function App() {
           </Route>
         ) : null}
 
-        {/* Public Routes */}
+        {/* Public Routes */} 
         <Route
           path="/"
           element={<Layout onLogoClick={handleLogoClick}><Home /></Layout>}
