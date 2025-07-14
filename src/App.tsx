@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import AdminLayout from './components/admin/AdminLayout';
@@ -19,7 +19,6 @@ import Register from './pages/Register';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Admin from './components/admin/AdminLayout';
-// import AdminDashboard from './pages/admin/Dashboard';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
@@ -29,6 +28,8 @@ import AdminUsers from './pages/admin/Users';
 import AdminOrders from './pages/admin/Orders';
 import PrivacyPolicy from './pages/privacyPolicy';
 import TermsAndConditions from './pages/termAndConditions';
+import ShippingPolicy from './pages/shippingPolicy';
+import OtpVerification from './pages/otpVerification';
 // index.js or App.jsx
 
 function App() {
@@ -92,6 +93,8 @@ function App() {
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
         <Route path="/t&c" element={<Layout><TermsAndConditions /></Layout>} />
+        <Route path="/shipping-policy" element={<Layout><ShippingPolicy /></Layout>} />
+        <Route path="/verify-otp" element={<Layout><OtpVerification /></Layout>} />
 
         {/* Redirect /admin to dashboard if authenticated */}
         <Route path="/admin/*" element={isAdmin ? <Layout><Admin /></Layout> : <Navigate to="/" />} />

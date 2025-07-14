@@ -1,9 +1,11 @@
-
-import { fetchOrders, cancelOrder, 
-    createOrder, addItemsInCart, 
-    fetchItems, fetchCategory, fetchItemBySlug, getCartDetail, 
-    updateCartItemQuantity, clearCartItems, clearCartItemById, 
-    fetchOrderById, getUsersList, addSubsEmail } from "./apiController.ts"
+import {
+    fetchOrders, cancelOrder,
+    createOrder, addItemsInCart,
+    fetchItems, fetchCategory, fetchItemBySlug, getCartDetail,
+    updateCartItemQuantity, clearCartItems, clearCartItemById,
+    fetchOrderById, getUsersList, addSubsEmail,
+    registerUser
+} from "./apiController.ts"
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 /******************************* Items ******************************/
@@ -105,5 +107,11 @@ export const useGetUserList = () => {
     return useQuery({
         queryKey: ['getUsersList'], // unique key for this query
         queryFn: () => getUsersList(),
+    });
+}
+
+export const useRegisterUser = () => {
+    return useMutation({
+        mutationFn: (payload) => registerUser(payload)
     });
 }

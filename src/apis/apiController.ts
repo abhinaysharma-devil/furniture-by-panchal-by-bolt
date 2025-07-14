@@ -137,5 +137,23 @@ const getUsersList = async () => {
 };
 
 
+const registerUser = async (payload: any) => {
 
-export { fetchOrders, cancelOrder, createOrder, addItemsInCart, fetchItems, fetchCategory, fetchItemBySlug, getCartDetail, addSubsEmail, updateCartItemQuantity, clearCartItems, clearCartItemById, fetchOrderById, getUsersList }
+    try {
+
+        let response = await callAxios("POST", "/api/user/auth/register", payload)
+
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
+export {
+    fetchOrders, cancelOrder, createOrder, addItemsInCart,
+    fetchItems, fetchCategory, fetchItemBySlug,
+    getCartDetail,
+    addSubsEmail, updateCartItemQuantity, clearCartItems,
+    clearCartItemById,
+    fetchOrderById, getUsersList, registerUser
+}
