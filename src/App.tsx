@@ -27,10 +27,8 @@ import AdminProducts from './pages/admin/Products';
 import AdminUsers from './pages/admin/Users';
 import AdminOrders from './pages/admin/Orders';
 import PrivacyPolicy from './pages/privacyPolicy';
-import TermsAndConditions from './pages/TermAndConditions'; 
-import ShippingPolicy from './pages/ShippingPolicy';
-// import OtpVerification from './pages/otpVerification';
-// index.js or App.jsx
+import TermsAndConditions from './pages/tnc'; 
+import ShippingPolicy from './pages/shippingPolicy';
 
 function App() {
   const [logoClickCount, setLogoClickCount] = useState(0);
