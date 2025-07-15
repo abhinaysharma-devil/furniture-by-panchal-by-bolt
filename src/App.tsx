@@ -28,7 +28,7 @@ import AdminUsers from './pages/admin/Users';
 import AdminOrders from './pages/admin/Orders';
 import PrivacyPolicy from './pages/privacyPolicy';
 import TermsAndConditions from './pages/tnc'; 
-import ShippingPolicy from './pages/shippingPolicy';
+import ShippingPolicy from './pages/sp';
 
 function App() {
   const [logoClickCount, setLogoClickCount] = useState(0);
