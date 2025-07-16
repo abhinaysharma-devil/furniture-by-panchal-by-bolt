@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 // import { useCartStore } from '../store/cartStore';
 // import { useOrderStore } from '../store/orderStore';
 import { formatPrice } from '../lib/utils';
@@ -373,7 +373,7 @@ const Checkout: React.FC = () => {
 
                 <div className="mt-6 text-xs text-gray-500">
                   <p>
-                    By placing your order, you agree to our <a href="#" className="text-primary">Terms of Service</a> and <a href="#" className="text-primary">Privacy Policy</a>.
+                    By placing your order, you agree to our <Link to="/t&c" className="text-primary">Terms of Service</Link> and <Link to="/privacy-policy" className="text-primary">Privacy Policy</Link>.
                   </p>
                 </div>
               </div>

@@ -23,6 +23,13 @@ const fetchCategory = async () => {
     return response;
 };
 
+const fetchFeaturedProducts = async () => {
+
+    let response = await callAxios("GET", `/api/furniture-items/featured`)
+
+    return response;
+};
+
 /******************************* Cart *******************************/
 
 const addItemsInCart = async (payload: any) => {
@@ -149,11 +156,23 @@ const registerUser = async (payload: any) => {
     }
 }
 
+const verifyOtp = async (payload: any) => {
+
+    try {
+
+        let response = await callAxios("POST", "/api/user/auth/verifyOtp", payload)
+
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
 export {
     fetchOrders, cancelOrder, createOrder, addItemsInCart,
     fetchItems, fetchCategory, fetchItemBySlug,
     getCartDetail,
     addSubsEmail, updateCartItemQuantity, clearCartItems,
     clearCartItemById,
-    fetchOrderById, getUsersList, registerUser
+    fetchOrderById, getUsersList, registerUser, verifyOtp, fetchFeaturedProducts
 }

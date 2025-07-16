@@ -255,26 +255,7 @@ export const orders: Order[] = [
 
 export const featuredProducts = furnitureItems.filter(item => item.featured);
 
-export const heroSlides = [
-  {
-    id: 'slide1',
-    imgPath: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
-    title: 'Premium Living Room Collection',
-    description: 'Elevate your living space with our exclusive furniture',
-  },
-  {
-    id: 'slide2',
-    imgPath: 'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
-    title: 'Dining Room Essentials',
-    description: 'Create memorable moments with our dining collections',
-  },
-  {
-    id: 'slide3',
-    imgPath: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
-    title: 'Bedroom Sanctuary',
-    description: 'Transform your bedroom into a peaceful retreat',
-  },
-];
+
 
 export const aboutUsContent = {
   title: 'About Furniture By Panchal',

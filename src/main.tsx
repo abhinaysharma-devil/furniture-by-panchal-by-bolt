@@ -4,17 +4,20 @@ import App from './App.tsx';
 import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SnackbarProvider } from "notistack";
-import { CartProvider } from './context/cartContext.tsx';
+import { CartProvider } from './context/cartContext';
+import { UserProvider } from './context/userContext';
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <SnackbarProvider>
-          <App />
-        </SnackbarProvider>
-      </CartProvider>
+      <UserProvider>
+        <CartProvider>
+          <SnackbarProvider>
+            <App />
+          </SnackbarProvider>
+        </CartProvider>
+      </UserProvider>
     </QueryClientProvider>
   </StrictMode>
 );

@@ -4,7 +4,9 @@ import {
     fetchItems, fetchCategory, fetchItemBySlug, getCartDetail,
     updateCartItemQuantity, clearCartItems, clearCartItemById,
     fetchOrderById, getUsersList, addSubsEmail,
-    registerUser
+    registerUser,
+    verifyOtp,
+    fetchFeaturedProducts,
 } from "./apiController.ts"
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -28,6 +30,13 @@ export const useGetProductCategory = () => {
     return useQuery({
         queryKey: ['fetchCategory'], // unique key for this query
         queryFn: () => fetchCategory(),
+    });
+}
+
+export const useGetFeaturedProduct = () => {
+    return useQuery({
+        queryKey: ['fetchFeaturedProducts'], // unique key for this query
+        queryFn: () => fetchFeaturedProducts(),
     });
 }
 
@@ -113,5 +122,11 @@ export const useGetUserList = () => {
 export const useRegisterUser = () => {
     return useMutation({
         mutationFn: (payload) => registerUser(payload)
+    });
+}
+
+export const useVerifyOtp = () => {
+    return useMutation({
+        mutationFn: (payload) => verifyOtp(payload)
     });
 }

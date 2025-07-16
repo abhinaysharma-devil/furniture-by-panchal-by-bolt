@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './components/admin/AdminLogin';
@@ -29,6 +29,17 @@ import AdminOrders from './pages/admin/Orders';
 import PrivacyPolicy from './pages/privacyPolicy';
 import TermsAndConditions from './pages/tnc'; 
 import ShippingPolicy from './pages/sp';
+import OtpVerification from './pages/OtpVerification';
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 function App() {
   const [logoClickCount, setLogoClickCount] = useState(0);
@@ -53,6 +64,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       {showAdminLogin && (
         <AdminLogin
           onClose={() => setShowAdminLogin(false)}
@@ -92,7 +104,7 @@ function App() {
         <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />
         <Route path="/t&c" element={<Layout><TermsAndConditions /></Layout>} />
         <Route path="/shipping-policy" element={<Layout><ShippingPolicy /></Layout>} />
-        {/* <Route path="/verify-otp" element={<Layout><OtpVerification /></Layout>} /> */}
+        <Route path="/verify-otp" element={<Layout><OtpVerification /></Layout>} />
 
         {/* Redirect /admin to dashboard if authenticated */}
         <Route path="/admin/*" element={isAdmin ? <Layout><Admin /></Layout> : <Navigate to="/" />} />

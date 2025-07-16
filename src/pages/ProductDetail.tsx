@@ -57,7 +57,7 @@ const ProductDetail: React.FC = () => {
     }
   };
 
-
+  if (isItemBySlugLoading) return <Skeleton active />;
 
   if (!product) {
     return (
@@ -78,7 +78,6 @@ const ProductDetail: React.FC = () => {
   const category = getProductCategory?.find(cat => cat.id === product.categoryId);
 
 
-  if (isItemBySlugLoading) return <Skeleton active />;
   if (ItemBySlugError) return <p>Error: {ItemBySlugError.message}</p>;
 
   const relatedItems = getProductsByCategory?.filter(i => i.slug != slug)

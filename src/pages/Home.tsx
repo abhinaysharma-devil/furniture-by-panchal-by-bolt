@@ -4,13 +4,12 @@ import { ArrowRight } from 'lucide-react';
 import Carousel from '../components/ui/Carousel';
 import ProductCard from '../components/ui/ProductCard';
 import CategoryCard from '../components/ui/CategoryCard';
-import { heroSlides, categories, featuredProducts } from '../data/mockData';
 import axios from 'axios';
-import { useAddSubsEmail } from '../apis/apiHooks';
+import { useAddSubsEmail, useGetFeaturedProduct } from '../apis/apiHooks';
 import { enqueueSnackbar } from 'notistack';
 
 const Home: React.FC = () => {
-  const [data, setData] = useState(categories);
+  const [data, setData] = useState([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   useEffect(() => {
@@ -36,40 +35,22 @@ const Home: React.FC = () => {
     }
   }, []);
 
-  const [featuredProductsData, setFeaturedProductsData] = useState(featuredProducts);
-  const [featuredProductsLoading, setFeaturedProductsLoading] = useState(true);
+
+  const {
+    data: featuredProducts,
+    isLoading: featuredProductsLoading
+  } = useGetFeaturedProduct();
+
+  const [featuredProductsData, setFeaturedProductsData] = useState([]);
 
   useEffect(() => {
-    const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
-
-    // If you want to show a loader for featured products, initialize its loading state
-    setFeaturedProductsLoading(true);
-
-    if (baseApiUrl) {
-      axios.get(`${baseApiUrl}/api/furniture-items/featured`)
-        .then(response => {
-          setFeaturedProductsData(response.data);
-          // console.log('Fetched featured products from API:$$$', response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching featured products from API:', error);
-        })
-        .finally(() => {
-          console.log('Featured products fetch attempt completed.');
-          setFeaturedProductsLoading(false);
-        });
-    } else {
-      console.warn('VITE_API_BASE_URL is not set. Using mock data for featured products.');
-      setFeaturedProductsLoading(false);
-    }
-  }, []);
+    setFeaturedProductsData(featuredProducts);
+  }, [featuredProducts]);
 
   const [email, setEmail] = useState('');
 
   const {
     mutateAsync: addSubsEmail,
-    // isLoading: isAddingEmail,
-    // isError: isAddEmailError,
     isSuccess: isAddEmailSuccess
   } = useAddSubsEmail();
 
@@ -85,6 +66,7 @@ const Home: React.FC = () => {
       enqueueSnackbar("Email added Successfully", { variant: "success" });
     }
   };
+
   return (
     <div>
       {/* Hero Section */}
@@ -133,10 +115,10 @@ const Home: React.FC = () => {
               <h2 className="text-3xl font-bold mb-2">Featured Products</h2>
               <p className="text-gray-600">Discover our most popular furniture pieces</p>
             </div>
-            <Link to="/products" className="link flex items-center mt-4 md:mt-0">
+            {/* <Link to="/products" className="link flex items-center mt-4 md:mt-0">
               <span>Explore All Products</span>
               <ArrowRight className="ml-1 h-4 w-4" />
-            </Link>
+            </Link> */}
           </div>
 
           {featuredProductsLoading ? (
@@ -145,7 +127,7 @@ const Home: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {(featuredProductsData.length > 0 ? featuredProductsData : featuredProducts).slice(0, 4).map((product) => (
+              {(featuredProductsData?.length > 0 ? featuredProductsData : featuredProducts).slice(0, 4).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
@@ -260,6 +242,26 @@ const testimonials = [
     avatar: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750",
     text: "Beautiful designs and excellent craftsmanship. My dining table has become the centerpiece of family gatherings. Worth every penny!"
   }
+];
+export const heroSlides = [
+  {
+    id: 'slide1',
+    imgPath: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
+    title: 'Premium Living Room Collection',
+    description: 'Elevate your living space with our exclusive furniture',
+  },
+  {
+    id: 'slide2',
+    imgPath: 'https://images.pexels.com/photos/1080696/pexels-photo-1080696.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
+    title: 'Dining Room Essentials',
+    description: 'Create memorable moments with our dining collections',
+  },
+  {
+    id: 'slide3',
+    imgPath: 'https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750',
+    title: 'Bedroom Sanctuary',
+    description: 'Transform your bedroom into a peaceful retreat',
+  },
 ];
 
 export default Home;

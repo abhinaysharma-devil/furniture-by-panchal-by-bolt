@@ -71,7 +71,8 @@ const Cart: React.FC = () => {
     }
   };
 
-  if (isCartItemsLoading) return <Skeleton active />;;
+  if (isCartItemsLoading) return <Skeleton active />;
+  
   if (CartItemsError) return <p>Error: {CartItemsError.message}</p>;
 
   if (getCartItems.length === 0) {
