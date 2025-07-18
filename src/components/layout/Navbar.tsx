@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AlignJustify, X, ShoppingCart, User } from 'lucide-react';
-// import { useCartStore } from '../../store/cartStore';
 import { useAuthStore } from '../../store/authStore';
 import { useGetCartDetail } from '../../apis/apiHooks';
-// import { CartContext } from '../../context/cartContext';
 import fbpPng from '../../../public/fbp-logo-removebg-preview.png';
 
 interface NavbarProps {
@@ -20,7 +18,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onLogoClick }) => {
 
   const cartItemCount = cartItems?.length
 
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { logout } = useAuthStore();
+
+  const { user, isAuthenticated } = JSON.parse(localStorage.getItem('furniture-auth-storage') || '{}')
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);

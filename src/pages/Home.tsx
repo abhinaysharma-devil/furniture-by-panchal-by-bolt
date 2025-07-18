@@ -140,7 +140,7 @@ const Home: React.FC = () => {
         <div className="container-custom">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold mb-4">Craftsmanship That Lasts</h2>
+              <h2 className="text-3xl font-bold mb-4 text-white/80">Craftsmanship That Lasts</h2>
               <p className="mb-6 text-white/80 leading-relaxed">
                 At Furniture By Panchal, we pride ourselves on creating pieces that stand the test of time.
                 Our furniture is crafted with attention to detail, using only the finest materials, and designed to be both beautiful and functional.

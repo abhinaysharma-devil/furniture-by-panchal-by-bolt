@@ -109,7 +109,7 @@ const createOrder = async (payload: any) => {
 
     try {
 
-        let response = await callAxios("POST", "/api/orders", payload)
+        let response = await callAxios("POST", "/api/orders/add", payload)
 
         return response;
     } catch (error) {
@@ -124,6 +124,18 @@ const addSubsEmail = async (payload: any) => {
     try {
 
         let response = await callAxios("POST", "/api/stuff/addSubsEmail", payload)
+
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
+
+const sendMailToAdmin = async (payload: any) => {
+
+    try {
+
+        let response = await callAxios("POST", "/api/stuff/sendMail", payload)
 
         return response;
     } catch (error) {
@@ -156,6 +168,18 @@ const registerUser = async (payload: any) => {
     }
 }
 
+
+const userLogin = async (payload: any) => {
+
+    try {
+
+        let response = await callAxios("POST", "/api/user/auth/login", payload)
+
+        return response;
+    } catch (error) {
+        throw error
+    }
+}
 const verifyOtp = async (payload: any) => {
 
     try {
@@ -174,5 +198,5 @@ export {
     getCartDetail,
     addSubsEmail, updateCartItemQuantity, clearCartItems,
     clearCartItemById,
-    fetchOrderById, getUsersList, registerUser, verifyOtp, fetchFeaturedProducts
+    fetchOrderById, getUsersList, registerUser, verifyOtp, fetchFeaturedProducts, userLogin, sendMailToAdmin
 }

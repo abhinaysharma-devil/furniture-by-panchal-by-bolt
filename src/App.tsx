@@ -15,7 +15,6 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import Orders from './pages/Orders';
 import Profile from './pages/Profile';
 import Login from './pages/Login';
-import Register from './pages/Register';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Admin from './components/admin/AdminLayout';
@@ -30,6 +29,7 @@ import PrivacyPolicy from './pages/privacyPolicy';
 import TermsAndConditions from './pages/tnc'; 
 import ShippingPolicy from './pages/sp';
 import OtpVerification from './pages/OtpVerification';
+import Signup from './pages/Signup';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -98,7 +98,7 @@ function App() {
         <Route path="/orders" element={<Layout><Orders /></Layout>} />
         <Route path="/profile" element={<Layout><Profile /></Layout>} />
         <Route path="/login" element={<Layout><Login /></Layout>} />
-        <Route path="/register" element={<Layout><Register /></Layout>} />
+        <Route path="/signup" element={<Layout><Signup /></Layout>} />
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/contact" element={<Layout><Contact /></Layout>} />
         <Route path="/privacy-policy" element={<Layout><PrivacyPolicy /></Layout>} />

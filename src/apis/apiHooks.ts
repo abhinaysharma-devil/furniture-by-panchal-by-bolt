@@ -7,6 +7,8 @@ import {
     registerUser,
     verifyOtp,
     fetchFeaturedProducts,
+    userLogin,
+    sendMailToAdmin,
 } from "./apiController.ts"
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -107,6 +109,13 @@ export const useAddSubsEmail = () => {
     });
 }
 
+export const useSendMailToAdmin = () => {
+    return useMutation({
+        mutationFn: (payload) => sendMailToAdmin(payload),
+    });
+}
+
+
 
 /******************************* ADMIN *******************************/
 
@@ -128,5 +137,11 @@ export const useRegisterUser = () => {
 export const useVerifyOtp = () => {
     return useMutation({
         mutationFn: (payload) => verifyOtp(payload)
+    });
+}
+
+export const useUserLogin = () => {
+    return useMutation({
+        mutationFn: (payload) => userLogin(payload)
     });
 }

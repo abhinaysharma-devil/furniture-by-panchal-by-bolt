@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { contactUsContent } from '../data/mockData';
+import { useSendMailToAdmin } from '../apis/apiHooks';
+import { enqueueSnackbar } from 'notistack';
 
 interface FormData {
   name: string;
@@ -22,6 +24,11 @@ const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const {
+    mutateAsync: sendMailToAdmin,
+    isSuccess: isSendMailToAdmin
+  } = useSendMailToAdmin();
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -30,6 +37,18 @@ const Contact: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+
+    sendMailToAdmin({
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      subject: formData.subject,
+      message: formData.message,
+    })
+
+    if (isSendMailToAdmin) {
+      enqueueSnackbar("We'll get back to you shortly", { variant: "success" });
+    }
 
     // Simulate form submission
     setTimeout(() => {
@@ -288,7 +307,7 @@ const Contact: React.FC = () => {
               Schedule an appointment for a personalized shopping experience.
             </p>
           </div>
-          
+
         </div>
       </section>
     </div>

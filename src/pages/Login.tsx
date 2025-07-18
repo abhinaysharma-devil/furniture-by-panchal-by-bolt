@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
+// import { useAuthStore } from '../store/authStore';
+import { useUserLogin } from '../apis/apiHooks';
+import { useUser } from '../context/userContext';
+import { enqueueSnackbar } from 'notistack';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuthStore();
+  const { setUser } = useUser();
+  const {
+    mutateAsync: userLogin,
+    // isSuccess: isRegisterSuccess
+  } = useUserLogin();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,24 +37,41 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const success = await login(formData.email, formData.password);
+      const success = await userLogin({ email: formData.email, password: formData.password });
 
       if (success) {
+        setUser({
+          name: success?.user?.name,
+          email: success?.user?.email,
+          mobile: success?.user?.mobile,
+          id: success?.user?.id,
+          isAuthenticated: true
+        });
+        localStorage.setItem('authToken', success?.token);
+        localStorage.setItem('furniture-auth-storage', JSON.stringify({
+          user: {
+            name: success?.user?.name,
+            email: success?.user?.email,
+            mobile: success?.user?.mobile,
+            id: success?.user?.id,
+          },
+          token: success?.token,
+          isAuthenticated: true
+        }));
+        enqueueSnackbar("Login successfully", { variant: "success" });
         navigate('/profile');
       } else {
         setError('Invalid email or password');
       }
     } catch (err) {
+      console.log(err, "err")
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (isAuthenticated) {
-    navigate('/profile');
-    return null;
-  }
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className="py-16">
@@ -129,8 +153,8 @@ const Login: React.FC = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Don't have an account?{' '}
-                <Link to="/register" className="text-primary hover:text-primary-600 font-medium">
-                  Register
+                <Link to="/signup" className="text-primary hover:text-primary-600 font-medium">
+                  SignUp
                 </Link>
               </p>
             </div>

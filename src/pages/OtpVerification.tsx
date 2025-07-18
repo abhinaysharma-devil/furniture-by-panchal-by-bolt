@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useVerifyOtp } from '../apis/apiHooks';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/userContext';
 import { enqueueSnackbar } from 'notistack';
 
 const OtpVerification: React.FC = () => {
+
     const [otp, setOtp] = useState(['', '', '', '']);
     const navigate = useNavigate();
     const { setUser } = useUser();
@@ -12,13 +13,8 @@ const OtpVerification: React.FC = () => {
 
     const userEmail = useUser()?.user?.email || '';
 
-    console.log('first', userEmail);
-
     const {
-        mutateAsync: verifyOtp,
-        // isSuccess: isRegisterSuccess,
-        error: verifyOtpError,
-        data: res,
+        mutateAsync: verifyOtp
     } = useVerifyOtp();
 
     const handleChange = (index: number, value: string) => {
@@ -30,12 +26,6 @@ const OtpVerification: React.FC = () => {
 
         if (value && index < 3) {
             inputRefs.current[index + 1]?.focus();
-        }
-
-        if (newOtp.every((digit) => digit !== '')) {
-            handleOtpSubmit(newOtp.join(''));
-            //  onSubmit(newOtp.join('')); // No need to call onSubmit, we handle verification here
-
         }
     };
 
@@ -61,33 +51,34 @@ const OtpVerification: React.FC = () => {
     };
 
     const handleOtpSubmit = async (otp: string) => {
-        await verifyOtp({ otp, email: userEmail });
-        if(res) {
-            setUser({
-                name: res?.user?.name,
-                email: res?.user?.email,
-                mobile: res?.user?.mobile,
-                id: res?.user?.id,
-                isAuthenticated: true
-            });
-            localStorage.setItem('authToken', res?.token);
-            localStorage.setItem('furniture-auth-storage', JSON.stringify({
-                user: {
+        try {
+            const res = await verifyOtp({ otp, email: userEmail });
+            if (res) {
+                setUser({
                     name: res?.user?.name,
                     email: res?.user?.email,
                     mobile: res?.user?.mobile,
                     id: res?.user?.id,
-                },
-                token: res?.token
-            }));
-            enqueueSnackbar("OTP verified successfully", { variant: "success" });
-            navigate('/profile');
+                    isAuthenticated: true
+                });
+                localStorage.setItem('authToken', res?.token);
+                localStorage.setItem('furniture-auth-storage', JSON.stringify({
+                    user: {
+                        name: res?.user?.name,
+                        email: res?.user?.email,
+                        mobile: res?.user?.mobile,
+                        id: res?.user?.id,
+                    },
+                    token: res?.token,
+                    isAuthenticated: true
+                }));
+                enqueueSnackbar("OTP verified successfully", { variant: "success" });
+                navigate('/profile');
+            }
+        } catch (err: any) {
+            enqueueSnackbar(err?.response?.data?.message || err.message || "OTP verification failed.", { variant: "error" });
         }
     };
-
-    if (verifyOtpError) {
-        enqueueSnackbar(verifyOtpError?.response?.data?.message || verifyOtpError.message, { variant: "error" });
-    }
 
     return (
         <div className="py-16">
@@ -111,6 +102,7 @@ const OtpVerification: React.FC = () => {
                                 />
                             ))}
                         </div>
+                        <button className=" mt-10 mb-10 btn btn-primary w-full py-3 flex items-center justify-center" onClick={() => handleOtpSubmit(otp.join(''))}>Verify OTP</button>
                     </div>
                 </div >
             </div >

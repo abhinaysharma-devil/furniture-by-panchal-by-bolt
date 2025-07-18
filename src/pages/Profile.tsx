@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { User, Settings, LogOut } from 'lucide-react';
-// import axios from 'axios';
+import { useUser } from '../context/userContext';
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated, updateProfile, logout } = useAuthStore();
+  const { updateProfile, logout } = useAuthStore();
+
+  const { user: userContext } = useUser();
+
+  const {user, isAuthenticated} = localStorage.getItem('furniture-auth-storage') ? JSON.parse(localStorage.getItem('furniture-auth-storage') || '{}') : userContext;
+
+  console.log('user', user, 'isAuthenticated', isAuthenticated);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
