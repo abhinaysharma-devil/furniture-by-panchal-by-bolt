@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 // import { useOrderStore } from '../store/orderStore';
 import { formatPrice } from '../lib/utils';
 import { useCreateOrder, useGetCartDetail } from '../apis/apiHooks';
+import axios from 'axios';
 
 interface FormData {
   name: string;
@@ -87,35 +88,107 @@ const Checkout: React.FC = () => {
     return isValid;
   };
 
+  /**88888888888888888888888888888888888888888888888888888888888888888888888 */
+
+  //  // at the top
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
-    console.log('Form submitted:create order', formData);
+    if (formData.paymentMethod === 'cod') {
+      // COD order creation
+      const order = await createOrder<FormData>({
+        ...formData,
+      });
 
-    // // Create the order
-    let orderId = await createOrder<FormData>({
-      name: formData.name,
-      address: formData.address,
-      city: formData.city,
-      state: formData.state,
-      pincode: formData.pincode,
-      phone: formData.phone,
-    });
+      const orderId = order?.id
 
+      if (orderId) {
+        navigate(`/order-confirmation/${orderId}`);
+      }
 
-    console.log('orderId>>>>>>>>>>>>>>', orderId);
-    
+    } else if (formData.paymentMethod === 'online') {
+      try {
 
-    orderId = orderId?.id
+        const totalAmount = getCartTotal() + (getCartTotal() > 25000 ? 0 : 1) + getCartTotal() * 0.18;
+        const amount = Math.round(totalAmount); // to paisa
 
-    if (orderId) {
-      // Redirect to confirmation page
-      navigate(`/order-confirmation/${orderId}`);
+        const { data: order } = await axios.post('http://localhost:5000/rzp/create-order', {
+          amount, // in paisa
+        });
+
+        const options = {
+          key: 'rzp_live_KdfWXGf8ewyxOD', // Razorpay Key ID
+          amount: order.amount,
+          currency: order.currency,
+          name: 'Furniture By Panchal',
+          description: 'Order Payment',
+          order_id: order.id,
+          handler: async function (response: any) {
+            const verifyRes = await axios.post('http://localhost:5000/rzp/verify-payment', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            if (verifyRes.data.success) {
+              const finalOrder = await createOrder<FormData>({
+                ...formData,
+                paymentMethod: 'online',
+              });
+
+              if (finalOrder?.id) {
+                navigate(`/order-confirmation/${finalOrder.id}`);
+              }
+            } else {
+              alert('Payment verification failed');
+            }
+          },
+          prefill: {
+            name: formData.name,
+            email: formData.email,
+            contact: formData.phone,
+          },
+          theme: {
+            color: '#3399cc',
+          },
+        };
+
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+
+      } catch (error) {
+        console.error('Payment error', error);
+      }
     }
   };
+
+
+
+  /**88888888888888888888888888888888888888888888888888888888888888888888888 */
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (!validateForm()) return;
+
+  //   // // Create the order
+  //   let orderId = await createOrder<FormData>({
+  //     name: formData.name,
+  //     address: formData.address,
+  //     city: formData.city,
+  //     state: formData.state,
+  //     pincode: formData.pincode,
+  //     phone: formData.phone,
+  //   });
+
+  //   orderId = orderId?.id
+
+  //   if (orderId) {
+  //     // Redirect to confirmation page
+  //     navigate(`/order-confirmation/${orderId}`);
+  //   }
+  // };
+  /**88888888888888888888888888888888888888888888888888888888888888888888888 */
 
   // Redirect to cart if cart is empty
   useEffect(() => {
@@ -339,7 +412,7 @@ const Checkout: React.FC = () => {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping</span>
                     <span className="font-medium">
-                      {getCartTotal() > 25000 ? 'Free' : formatPrice(500)}
+                      {getCartTotal() > 25000 ? 'Free' : formatPrice(1)}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -353,7 +426,7 @@ const Checkout: React.FC = () => {
                       <span className="text-primary">
                         {formatPrice(
                           getCartTotal() +
-                          (getCartTotal() > 25000 ? 0 : 500) +
+                          (getCartTotal() > 25000 ? 0 : 1) +
                           (getCartTotal() * 0.18)
                         )}
                       </span>

@@ -102,7 +102,7 @@ const OrderConfirmation: React.FC = () => {
                 </div>
                 <div className="flex justify-between py-2">
                   <span className="text-gray-600">Shipping</span>
-                  <span>{JSON.parse(orderByIdData.orderDetails).total > 25000 ? 'Free' : formatPrice(500)}</span>
+                  <span>{JSON.parse(orderByIdData.orderDetails).total > 25000 ? 'Free' : formatPrice(1)}</span>
                 </div>
                 <div className="flex justify-between py-2">
                   <span className="text-gray-600">Tax (GST 18%)</span>
@@ -113,7 +113,7 @@ const OrderConfirmation: React.FC = () => {
                   <span className="text-primary">
                     {formatPrice(
                       JSON.parse(orderByIdData.orderDetails).total +
-                      (JSON.parse(orderByIdData.orderDetails).total > 25000 ? 0 : 500) +
+                      (JSON.parse(orderByIdData.orderDetails).total > 25000 ? 0 : 1) +
                       (JSON.parse(orderByIdData.orderDetails).total * 0.18)
                     )}
                   </span>

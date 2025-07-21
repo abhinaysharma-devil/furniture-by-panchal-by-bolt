@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AlignJustify, X, ShoppingCart, User } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
-import { useGetCartDetail } from '../../apis/apiHooks';
 import fbpPng from '../../../public/fbp-logo-removebg-preview.png';
+import { useCart } from "../../context/cartContext"
 
 interface NavbarProps {
   onLogoClick?: () => void;
@@ -13,10 +13,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onLogoClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { cart } = useCart();
 
-  const { data: cartItems } = useGetCartDetail();
-
-  const cartItemCount = cartItems?.length
+  const cartItemCount = cart
 
   const { logout } = useAuthStore();
 
@@ -49,7 +48,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onLogoClick }) => {
           className="flex items-center"
           onClick={onLogoClick}
         >
-          {/* <span className="text-primary font-bold text-2xl">FurnitureByPanchal xxx</span> */}
 
           <img width={200} src={fbpPng} alt="" />
         </Link>

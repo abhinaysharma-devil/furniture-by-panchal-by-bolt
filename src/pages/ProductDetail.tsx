@@ -6,6 +6,8 @@ import ProductCard from '../components/ui/ProductCard';
 import { formatPrice } from '../lib/utils';
 import { useAddItemInCart, useGetItemBySlug, useGetProductCategory, useGetProducts } from '../apis/apiHooks';
 import { Skeleton } from "antd";
+import { useCart } from '../context/cartContext';
+
 
 const ProductDetail: React.FC = () => {
 
@@ -13,6 +15,7 @@ const ProductDetail: React.FC = () => {
   const [product, setProduct] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'specifications'>('description');
+  const { setCart, cart } = useCart();
 
   const {
     data: getItemBySlug,
@@ -48,6 +51,8 @@ const ProductDetail: React.FC = () => {
     mutateAsync: addItemsInCart,
   } = useAddItemInCart();
 
+
+
   const handleAddToCart = async () => {
     if (product) {
       addItemsInCart({
@@ -55,6 +60,7 @@ const ProductDetail: React.FC = () => {
         quantity: quantity
       });
     }
+    setCart(Number(Number(cart) + quantity))
   };
 
   if (isItemBySlugLoading) return <Skeleton active />;

@@ -6,10 +6,12 @@ import QuantityInput from '../components/ui/QuantityInput';
 import { useCartClear, useGetCartDetail, useUpdateCartItemQuantity } from '../apis/apiHooks';
 import { clearCartItemById } from '../apis/apiController';
 import { Skeleton } from "antd";
+import { useCart } from '../context/cartContext';
 
 const Cart: React.FC = () => {
 
   const [getCartItems, setCartItems] = useState([]);
+  const { setCart, cart } = useCart();
 
   const getCartTotal = () => {
     return getCartItems.reduce(
@@ -21,6 +23,7 @@ const Cart: React.FC = () => {
     data: cartItems,
     isLoading: isCartItemsLoading,
     error: CartItemsError,
+    refetch: refetchCartItems
   } = useGetCartDetail();
 
   const { mutateAsync: updateCartItemQuantity } = useUpdateCartItemQuantity();
@@ -51,9 +54,11 @@ const Cart: React.FC = () => {
   const clearCart = async () => {
     // Optimistically clear the cart
     setCartItems([]);
+    setCart(null)
     // Call the mutation to clear the cart in the backend
     try {
       await clearCartItems();
+      refetchCartItems()
     } catch (err) {
       console.error("Failed to clear cart:", err);
       // If there's an error, you might want to revert the UI change
@@ -63,8 +68,10 @@ const Cart: React.FC = () => {
 
   const removeItem = async (id: string) => {
     setCartItems((prevItems: any[]) => prevItems.filter(item => item.id !== id));
+    setCart(Number(Number(cart) - (getCartItems.find(item => item.id === id)?.quantity)))
     try {
       await clearCartItemById(id);
+      refetchCartItems()
     } catch (err) {
       console.error("Failed to clear cart:", err);
       setCartItems(cartItems);
@@ -72,7 +79,7 @@ const Cart: React.FC = () => {
   };
 
   if (isCartItemsLoading) return <Skeleton active />;
-  
+
   if (CartItemsError) return <p>Error: {CartItemsError.message}</p>;
 
   if (getCartItems.length === 0) {
@@ -176,7 +183,7 @@ const Cart: React.FC = () => {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping</span>
                     <span className="font-medium">
-                      {getCartTotal() > 25000 ? 'Free' : formatPrice(500)}
+                      {getCartTotal() > 25000 ? 'Free' : formatPrice(1)}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -190,7 +197,7 @@ const Cart: React.FC = () => {
                       <span className="text-primary">
                         {formatPrice(
                           getCartTotal() +
-                          (getCartTotal() > 25000 ? 0 : 500) +
+                          (getCartTotal() > 25000 ? 0 : 1) +
                           (getCartTotal() * 0.18)
                         )}
                       </span>

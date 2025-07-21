@@ -19,12 +19,18 @@ const QuantityInput: React.FC<QuantityInputProps> = ({
   const handleDecrease = () => {
     if (quantity > min) {
       onChange(quantity - 1);
+      // setCart(Number(cart) - 1)
+
     }
   };
+
+  // const { setCart, cart } = useCart();
+
 
   const handleIncrease = () => {
     if (quantity < max) {
       onChange(quantity + 1);
+      // setCart(Number(cart) + 1)
     }
   };
 
@@ -46,7 +52,7 @@ const QuantityInput: React.FC<QuantityInputProps> = ({
       >
         <Minus className="h-4 w-4" />
       </button>
-      
+
       <input
         type="text"
         value={quantity}
@@ -54,7 +60,7 @@ const QuantityInput: React.FC<QuantityInputProps> = ({
         className="h-8 w-12 border-x border-gray-300 text-center text-sm focus:outline-none"
         aria-label="Quantity"
       />
-      
+
       <button
         type="button"
         onClick={handleIncrease}

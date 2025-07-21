@@ -10,9 +10,7 @@ const Profile: React.FC = () => {
 
   const { user: userContext } = useUser();
 
-  const {user, isAuthenticated} = localStorage.getItem('furniture-auth-storage') ? JSON.parse(localStorage.getItem('furniture-auth-storage') || '{}') : userContext;
-
-  console.log('user', user, 'isAuthenticated', isAuthenticated);
+  const { user, isAuthenticated} = localStorage.getItem('furniture-auth-storage') ? JSON.parse(localStorage.getItem('furniture-auth-storage') || '{}') : userContext;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);

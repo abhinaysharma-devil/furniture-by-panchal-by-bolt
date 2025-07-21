@@ -69,7 +69,7 @@ const clearCartItems = async () => {
 
 const clearCartItemById = async (id: string) => {
     try {
-        let response = await callAxios("DELETE", `/api/cart/clearCartItems/${id}`)
+        let response = await callAxios("DELETE", `/api/cart/clear/${id}`)
         return response;
     } catch (error) {
         throw error
