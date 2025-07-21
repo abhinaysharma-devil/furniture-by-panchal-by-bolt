@@ -6,6 +6,9 @@ import { formatPrice } from '../lib/utils';
 import { useCreateOrder, useGetCartDetail } from '../apis/apiHooks';
 import axios from 'axios';
 
+const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
+const rzpKey = import.meta.env.RZP_KEY_ID;
+
 interface FormData {
   name: string;
   address: string;
@@ -114,19 +117,19 @@ const Checkout: React.FC = () => {
         const totalAmount = getCartTotal() + (getCartTotal() > 25000 ? 0 : 1) + getCartTotal() * 0.18;
         const amount = Math.round(totalAmount); // to paisa
 
-        const { data: order } = await axios.post('http://localhost:5000/rzp/create-order', {
+        const { data: order } = await axios.post(`${baseApiUrl}/rzp/create-order`, {
           amount, // in paisa
         });
 
         const options = {
-          key: 'rzp_live_KdfWXGf8ewyxOD', // Razorpay Key ID
+          key: rzpKey, // Razorpay Key ID
           amount: order.amount,
           currency: order.currency,
           name: 'Furniture By Panchal',
           description: 'Order Payment',
           order_id: order.id,
           handler: async function (response: any) {
-            const verifyRes = await axios.post('http://localhost:5000/rzp/verify-payment', {
+            const verifyRes = await axios.post(`${baseApiUrl}/rzp/verify-payment`, {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
