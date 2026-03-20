@@ -110,7 +110,7 @@ export const useAuthStore = create<AuthState>()(
         set({ user: null, isAuthenticated: false });
         // If you stored a token, remove it on logout
         // localStorage.removeItem('authToken');
-        console.log('User logged out.');
+
       },
       updateProfile: async (updates: Partial<User>) => {
         const baseApiUrl = import.meta.env.VITE_API_BASE_URL;
@@ -128,7 +128,7 @@ export const useAuthStore = create<AuthState>()(
 
         try {
           const response = await axios.put<UpdateProfileResponse>(
-            `${baseApiUrl}/api/auth/profile`,
+            `${baseApiUrl}/api/user/auth/profile`,
             updates,
             {
               headers: {
@@ -139,8 +139,8 @@ export const useAuthStore = create<AuthState>()(
           );
 
           if (response) {
-            set({ user: response.data.user, isAuthenticated: true });
-            // console.log('Profile updated successfully:', response.data);
+
+            set({ user: response.data, isAuthenticated: true });
             return true;
           }
 

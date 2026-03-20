@@ -13,7 +13,7 @@ const CategoriesList: React.FC = () => {
 
     setIsLoading(true); // Set loading to true at the start of the effect
     if (baseApiUrl) {
-      axios.get(`${baseApiUrl}/api/categories`)
+      axios.get(`${baseApiUrl}/api/category/list`)
         .then(response => {
           setData(response.data);
         })

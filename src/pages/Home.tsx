@@ -17,16 +17,16 @@ const Home: React.FC = () => {
 
     setCategoriesLoading(true);
     if (baseApiUrl) {
-      axios.get(`${baseApiUrl}/api/categories`)
+      axios.get(`${baseApiUrl}/api/category/list`)
         .then(response => {
           setData(response.data);
-          // console.log('Fetched categories from API:$$$', response.data);
+        
         })
         .catch(error => {
           console.error('Error fetching categories from API:', error);
         })
         .finally(() => {
-          // console.log('Categories fetch attempt completed.');
+         
           setCategoriesLoading(false);
         });
     } else {
@@ -99,9 +99,9 @@ const Home: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(data.length > 0 ? data : categories).slice(0, 3).map((category) => (
+              {(data.length > 0 ? data.slice(0, 3).map((category) => (
                 <CategoryCard key={category.id} category={category} />
-              ))}
+              )) : [])}
             </div>
           )}
         </div>

@@ -25,7 +25,7 @@ const fetchCategory = async () => {
 
 const fetchFeaturedProducts = async () => {
 
-    let response = await callAxios("GET", `/api/furniture-items/featured`)
+    let response = await callAxios("GET", `/api/item/featured`)
 
     return response;
 };
@@ -80,7 +80,7 @@ const clearCartItemById = async (id: string) => {
 
 const fetchOrders = async () => {
 
-    let response = await callAxios("GET", "/api/orders")
+    let response = await callAxios("GET", "/api/orders/list")
 
     return response;
 };

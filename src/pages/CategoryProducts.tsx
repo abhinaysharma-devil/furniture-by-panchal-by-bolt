@@ -64,7 +64,6 @@ const CategoryProducts: React.FC = () => {
           sortedProducts = products.filter(item => item.categoryId === category.id);
         }
     }
-    console.log('sortedProducts XXXXXXXX', sortedProducts)
 
     setProducts(sortedProducts);
   };

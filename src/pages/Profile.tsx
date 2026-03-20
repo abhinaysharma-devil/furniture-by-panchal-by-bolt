@@ -20,7 +20,7 @@ const Profile: React.FC = () => {
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
-    mobile: user?.mobile || '',
+    mobile: user?.mobile || ''
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,7 +62,6 @@ const Profile: React.FC = () => {
   
   useEffect(() => {
     if (!isAuthenticated || !user) {
-      console.log('first>>>>>>>>>>>>>>>>>>>>>')
       navigate('/login');
       // return null;
     }

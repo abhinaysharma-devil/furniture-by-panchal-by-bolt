@@ -51,14 +51,12 @@ const Categories: React.FC = () => {
   const handleDeleteCategory = (categoryId: string) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       // In a real app, this would call an API to delete the category
-      console.log('Deleting category:', categoryId);
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, this would call an API to save the category
-    console.log('Saving category:', formData);
     setIsAddModalOpen(false);
     setIsEditModalOpen(false);
   };

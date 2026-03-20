@@ -77,14 +77,12 @@ const Products: React.FC = () => {
   const handleDeleteProduct = (productId: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       // In a real app, this would call an API to delete the product
-      console.log('Deleting product:', productId);
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, this would call an API to save the product
-    console.log('Saving product:', formData);
     setIsAddModalOpen(false);
     setIsEditModalOpen(false);
   };

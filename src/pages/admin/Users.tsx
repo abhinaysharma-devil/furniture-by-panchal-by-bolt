@@ -63,14 +63,12 @@ const Users: React.FC = () => {
   const handleDeleteUser = (userId: string) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       // In a real app, this would call an API to delete the user
-      console.log('Deleting user:', userId);
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, this would call an API to save the user
-    console.log('Saving user:', formData);
     setIsAddModalOpen(false);
     setIsEditModalOpen(false);
   };
